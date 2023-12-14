@@ -1,0 +1,15 @@
+
+`	java:S112""FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+`	java:S112;"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+k	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(—õÓ‹ûÿÿÿÿ
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(üïÌğıÿÿÿÿ
+E	java:S106"+Replace this use of System.out by a logger.(îá¿Âøÿÿÿÿ
+@	java:S106!"+Replace this use of System.out by a logger.(ó«Ì¯
+@	java:S106G"+Replace this use of System.out by a logger.(Êúá«
+E	java:S106H"+Replace this use of System.out by a logger.(ˆ¿Áøÿÿÿÿ
+@	java:S106I"+Replace this use of System.out by a logger.(Šş‰ì
+E	java:S106J"+Replace this use of System.out by a logger.(Ÿ²º¥ûÿÿÿÿ
+?	java:S106K"+Replace this use of System.out by a logger.(›˜
+E	java:S106L"+Replace this use of System.out by a logger.(ç¯‚ûùÿÿÿÿ
+h
+java:S1128"MRemove this unused import 'com.example.dw_huy.db.DBStaging.DBStagingConnect'.(Ë¦×ßıÿÿÿÿ
