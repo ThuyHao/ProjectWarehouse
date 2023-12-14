@@ -1,0 +1,127 @@
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'java'
+    id "org.hidetake.ssh" version "2.11.2"
+    id 'war'
+
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://oss.sonatype.org/content/repositories/releases/')
+    }
+
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+    mavenCentral()
+
+}
+
+dependencies {
+
+    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'org.jdbi:jdbi3-core:3.23.0'
+    implementation 'javax.servlet:javax.servlet-api:3.1.0'
+    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'javax.json:javax.json-api:1.1.4'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.apache.httpcomponents:fluent-hc:4.5.13'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'org.jdbi:jdbi3-core:3.23.0'
+    implementation 'javax.servlet:jstl:1.2'
+    implementation 'org.glassfish:javax.json:1.1.4'
+    implementation 'junit:junit:3.8.1'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'com.zaxxer:HikariCP:3.1.0'
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+    implementation 'org.json:json:20211205'
+    implementation 'com.google.cloud.sql:mysql-socket-factory:1.0.15'
+    implementation group: 'com.paypal.sdk', name: 'checkout-sdk', version: '1.0.2'
+    implementation group: 'com.paypal.sdk', name: 'paypal-core', version: '1.6.5'
+    implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'com.opencsv:opencsv:5.6'
+
+    // Apache POI - Core
+    implementation 'org.apache.poi:poi:5.0.0'
+
+    // Apache POI - Excel
+    implementation 'org.apache.poi:poi-ooxml:5.2.2'
+
+    // Log4j2
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+description = 'KIDSHOP Maven Webapp'
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+apply plugin: 'org.hidetake.ssh'
+remotes {
+    host {
+        host = '34.124.142.121'
+        user = 'g20130253'
+        identity = file('C:/Users/RynVi/.ssh/id_rsa')
+    }
+}
+ssh.settings {
+    knownHosts = allowAnyHosts
+}
+task docker_app_start {
+    doLast {
+        println 'begin docker_app_start'
+        ssh.run {
+            session(remotes.host) {
+                execute 'docker stop tomcat9', ignoreError: true
+                execute 'docker run -it --rm -d ' +
+                        '--name tomcat9 ' +
+                        '-v /usr/deploy:/usr/local/tomcat/webapps ' +
+                        '-p 80:8080 ' +
+                        'tomcat:9.0&'
+            }
+        }
+    }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+task docker_upload_file_to_server {
+    doLast {
+        println 'begin docker_upload_file_to_server'
+        ssh.run {
+            session(remotes.host) {
+                remove '/usr/deploy/.war'
+
+                put from: "${project.projectDir}/build/libs/Project_TTLTW_Nhom14-1.0-SNAPSHOT.war",
+                        into: "/usr/deploy/.war"
+            }
+        }
+    }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+task docker_deploy {
+    docker_deploy.dependsOn docker_app_start
+    docker_deploy.dependsOn docker_upload_file_to_server
+    docker_deploy.dependsOn build
+    tasks.getByName('docker_app_start').mustRunAfter docker_upload_file_to_server
+}
+task copyWebapp(type: Copy) {
+    from 'src/main/webapp'
+    into 'build/webapp'
+    duplicatesStrategy = 'exclude'
+}
