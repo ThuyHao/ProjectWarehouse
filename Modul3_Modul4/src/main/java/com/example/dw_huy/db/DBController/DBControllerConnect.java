@@ -23,6 +23,7 @@ public class DBControllerConnect {
     }
 
     public static DBControllerConnect getInstall() {
+        //1. connect to db controller
         if (install == null) install = new DBControllerConnect();
         return install;
     }

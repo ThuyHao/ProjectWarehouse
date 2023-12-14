@@ -51,7 +51,7 @@ public class StagingDAO {
         List<staging> stagingList = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM `staging` WHERE DATE(`created_at`) = CURDATE()";
+            String sql = "SELECT * FROM `staging` WHERE DATE(`created_at`) = CURDATE() and `status`='SC'";
             getList(stagingList, sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);

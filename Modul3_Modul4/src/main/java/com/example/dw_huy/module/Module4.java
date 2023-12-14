@@ -10,6 +10,7 @@ import com.example.dw_huy.beans.DBNew.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,123 +34,160 @@ public class Module4 {
     public static void main(String[] args) {
         boolean currentProcessRunning = controlsDAO.checkControlRunning();
         int config_id = controlsDAO.getLatestConfigId();
+        List<String> log_status_list = new ArrayList<>();
         String log_status = "";
 
-        //1. Kiểm tra xem có process nào đang chạy hay không
+        //2. check if any process is running
         if (currentProcessRunning) {
-            System.out.println("Some process is running");
-        }
-        //2. Nếu không có process nào đang chạy thì tạo 1 control mới
-        else {
+            //2.1 if process is running then insert log
+            logDAO.insertLog("Some process is running", "warehouse_mart", Module4.class.getSimpleName());
+            //2.2 send email to newsofgame2023@gmail.com with title error and message Some process is running
+            sendEmail("Lỗi", "Some process is running");
+        } else {
+            //3. if no process is running then insert control running
             controlsDAO.insertControl(config_id, "warehouse_mart", "warehouse_mart", "RUNNING");
-            //3. Lấy dữ liệu author từ dbnew
+            //5. get author data from dbnew that just been created or updated
             List<authorsDim> authorsDimList = authorDAO.getAuthorsDataTimeUp();
 
-            //4. Kiểm tra xem danh sách author có dữ liệu hay không
+            //6. check if author data is empty
             if (authorsDimList.isEmpty()) {
-                //5. Nếu không có dữ liệu thì insert log và gửi mail thông báo lỗi
+                //6.1 if author data is empty then insert 1 row in the log table : status, event_name, location
                 logDAO.insertLog("authorsDim table is empty", "warehouse_mart", Module4.class.getSimpleName());
-                sendEmail("Lỗi", "Không có dữ liệu trong authorsDim table ở dbnew");
+                //6.2 send email to newsofgame2023 with title error and message authorsDim table is empty
+                sendEmail("error", "authorsDim table is empty");
             } else {
-                //6. Nếu có dữ liệu thì thực hiện ghi đè dữ liệu vào dbmart
+                //8. insert author data into dbmart value (id, name, created_at, updated_at, created_by, updated_by)
                 for (authorsDim authorsDim : authorsDimList) {
-                    //note: sử dụng duplicate key để ghi đè dữ liệu
-                    log_status = authorDAOMart.insertAuthor(authorsDim);
+                    //note: using duplicate key to override data
+                    //9. get all log status of insert author
+                    log_status_list.add(authorDAOMart.insertAuthor(authorsDim));
                 }
-                //7. Kiểm tra xem insert author có thành công hay không
-                if (!(log_status.equals("SC"))) {
-                    //8. Nếu không thành công thì insert log và gửi mail thông báo lỗi
+                //10. check if any log status is not success in log_status_list
+                if (log_status_list.contains("EI")) {
+                    //10.1 if any log status is not success then insert 1 row in the log table : status, event_name, location
                     logDAO.insertLog(log_status, "authorsdim", Module4.class.getSimpleName());
-                    sendEmail("Lỗi", "Lỗi insert author");
+                    //10.2 send email to newsofgame2023 with title error and message error insert author
+
+                    sendEmail("error", "error insert author");
+                    //10.3 delete control running
                     controlsDAO.deleteControl();
                 }
             }
-            //9. Lấy dữ liệu category từ dbnew
+            //11. get category data from dbnew that just been created or updated
             List<categoriesDim> categoriesDimList = CategoryDAO.getCategoryDataTimeUp();
-            //10. Kiểm tra xem danh sách category có dữ liệu hay không
+            //12. check if category data is empty
             if (categoriesDimList.isEmpty()) {
-                //11. Nếu không có dữ liệu thì insert log và gửi mail thông báo lỗi
+                //12.1 if category data is empty then insert 1 row in the log table : status, event_name, location
                 logDAO.insertLog("categoriesDim table is empty", "warehouse_mart", Module4.class.getSimpleName());
-                sendEmail("Lỗi", "Không có dữ liệu trong categoriesDim table ở dbnew");
+                //12.2 send email to newsofgame2023 with title error and message categoriesDim table is empty
+                sendEmail("error", "categoriesDim table is empty");
             } else {
-                //12. Nếu có dữ liệu thì thực hiện ghi đè dữ liệu vào dbmart
-
+                //13. reset log_status_list
+                log_status_list.clear();
+                //14. insert category data into dbmart value (id, name, created_at, updated_at, created_by, updated_by)
                 for (categoriesDim categoriesDim : categoriesDimList) {
                     //note: sử dụng duplicate key để ghi đè dữ liệu
-                    log_status = categoryDAOMart.insertCategory(categoriesDim);
+                    //15. get all log status of insert category
+                    log_status_list.add(categoryDAOMart.insertCategory(categoriesDim));
                 }
-                //13. Kiểm tra xem insert category có thành công hay không
-                if (!(log_status.equals("SC"))) {
-                    //14. Nếu không thành công thì insert log và gửi mail thông báo lỗi
+                //16. check if any log status is not success in log_status_list
+                if (log_status_list.contains("EI")) {
+                    //16.1 if any log status is not success then insert 1 row in the log table : status, event_name, location
                     logDAO.insertLog(log_status, "categoriesdim", Module4.class.getSimpleName());
-                    sendEmail("Lỗi", "Lỗi insert category");
+                    //16.2 send email to newsofgame2023 with title error and message error insert category
+                    sendEmail("error", "error insert category");
+                    //16.3 delete control running
                     controlsDAO.deleteControl();
                 }
             }
-            //15. Lấy dữ liệu game_news từ dbnew
+            //17. get game_news data from dbnew that just been created or updated
             List<game_newsFact> game_newsFactList = game_newsDAO.getDataTimeUp();
-            //16. Kiểm tra xem danh sách game_news có dữ liệu hay không
+            //18. check if game_news data is empty
             if (game_newsFactList.isEmpty()) {
-                //17. Nếu không có dữ liệu thì insert log và gửi mail thông báo lỗi
+                //18.1. if game_news data is empty then insert 1 row in the log table : status, event_name, location
                 logDAO.insertLog("game_newsFact table is empty", "warehouse_mart", Module4.class.getSimpleName());
-                sendEmail("Lỗi", "Không có dữ liệu trong game_newsFact table ở dbnew");
+                //18.2 send email to newsofgame2023 with title error and message game_newsFact table is empty
+                sendEmail("error", "game_newsFact table is empty");
             } else {
-                //18. Nếu có dữ liệu thì thực hiện ghi đè dữ liệu vào dbmart
+                //19. reset log_status_list
+                log_status_list.clear();
+                //20. insert game_news data into dbmart value (id, name, created_at, updated_at, created_by, updated_by)
                 for (game_newsFact game_newsFact : game_newsFactList) {
                     //note: sử dụng duplicate key để ghi đè dữ liệu
-                    log_status = game_newsDAOMart.insertNews(game_newsFact);
+                    //21. get all log status of insert game_news
+                    log_status_list.add(game_newsDAOMart.insertNews(game_newsFact));
                 }
-                //19. Kiểm tra xem insert game_news có thành công hay không
-                if (!(log_status.equals("SC"))) {
-                    //20. Nếu không thành công thì insert log và gửi mail thông báo lỗi
+                //22. check if any log status is not success in log_status_list
+                if (log_status_list.contains("EI")) {
+                    //22.1 if any log status is not success then insert 1 row in the log table : status, event_name, location
                     logDAO.insertLog(log_status, "game_newsFact", Module4.class.getSimpleName());
-                    sendEmail("Lỗi", "Lỗi insert game_news");
+                    //22.2 send email to newsofgame2023 with title error and message error insert game_news
+                    sendEmail("error", "error insert game_news");
+                    //22.3 delete control running
                     controlsDAO.deleteControl();
                 }
             }
-            //21. Lấy dữ liệu homeAggregate từ dbnew
+            //23. Lẫy dữ liệu từ dbnew home aggregate
             List<homeAggregate> homeAggregateList = homeAggregateDAONew.getDataTimeUp();
-            //22. Kiểm tra xem danh sách homeAggregate có dữ liệu hay không
+            //24. Kiểm tra xem homeAggregate có dữ liệu hay không
             if (homeAggregateList.isEmpty()) {
-                //23. Nếu không có dữ liệu thì insert log và gửi mail thông báo lỗi
+                //24.1. Nếu không có dữ liệu thì insert 1 row into log table : status, event_name, location
                 logDAO.insertLog("homeAggregate table is empty", "warehouse_mart", Module4.class.getSimpleName());
-                sendEmail("Lỗi","Không có dữ liệu trong homeAggregate table ở dbnew");
+                //24.2. send email to newsofgame2023 with title error and message homeAggregate table is empty
+                sendEmail("error", "homeAggregate table is empty");
             } else {
-                //24. Nếu có dữ liệu thì thực hiện ghi đè dữ liệu vào dbmart
+                //25. reset log_status_list
+                log_status_list.clear();
+                //26. insert homeAggregate data into dbmart value (id, name, created_at, updated_at, created_by, updated_by)
                 for (homeAggregate homeAggregate : homeAggregateList) {
-                    log_status = homeAggregateDAOMart.insertHomeAggregate(homeAggregate);
-                }
-                //25. Kiểm tra xem insert homeAggregate có thành công hay không
-                if (!(log_status.equals("SC"))) {
-                    //26. Nếu không thành công thì insert log và gửi mail thông báo lỗi và delete control running
-                    logDAO.insertLog(log_status, "homeAggregate", Module4.class.getSimpleName());
-                    sendEmail("Lỗi", "Lỗi insert homeAggregate");
-                    controlsDAO.deleteControl();
-                }
-            }
-            //27. Lẫy dữ liệu từ dbnew detail aggregate
-            List<detailNewAggregate> detailNewAggregateList = detailNewAggregateDAO.getDataTimeUp();
-            //28. Kiểm tra xem detailNewAggregate có dữ liệu hay không
-            if (detailNewAggregateList.isEmpty()) {
-                logDAO.insertLog("detailNewAggregate table is empty", "warehouse_mart", Module4.class.getSimpleName());
-            sendEmail("Lỗi", "Không có dữ liệu trong detailNewAggregate table ở dbnew");
-            } else {
-                //29. Nếu có dữ liệu thì thực hiện ghi đè dữ liệu vào dbmart
-                detailNewAggregateDAOMart.deleteAllData();
-                for (detailNewAggregate detailNewAggregate : detailNewAggregateList) {
+                    //note: sử dụng duplicate key để ghi đè dữ liệu
+                    //27. get all log status of insert homeAggregate
+                    log_status_list.add(homeAggregateDAOMart.insertHomeAggregate(homeAggregate));
 
-                    log_status = detailNewAggregateDAOMart.insertDetailNewAggregate(detailNewAggregate);
                 }
-                //30. Kiểm tra xem insert detailNewAggregate có thành công hay không
-                if (!(log_status.equals("SC"))) {
-                    logDAO.insertLog(log_status, "detailNewAggregate", Module4.class.getSimpleName());
-                    sendEmail("Lỗi", "Lỗi insert detailNewAggregate");
+                //28. check if any log status is not success in log_status_list
+                if (log_status_list.contains("EI")) {
+                    //28.1 if any log status is not success then insert 1 row in the log table : status, event_name, location
+                    logDAO.insertLog(log_status, "homeAggregate", Module4.class.getSimpleName());
+                    //28.2 send email to newsofgame2023 with title error and message error insert homeAggregate
+                    sendEmail("error", "error insert homeAggregate");
+                    //28.3 delete control running
                     controlsDAO.deleteControl();
                 }
             }
-            //31. Hoàn thiện module, cập nhật control và gửi mail thông báo thành công
+            //29. Get data from dbnew detailNewAggregate that just been created or updated
+            List<detailNewAggregate> detailNewAggregateList = detailNewAggregateDAO.getDataTimeUp();
+            //30. Check if detailNewAggregate is empty
+            if (detailNewAggregateList.isEmpty()) {
+                //30.1. If detailNewAggregate is empty then insert 1 row into log table : status, event_name, location
+
+                logDAO.insertLog("detailNewAggregate table is empty", "warehouse_mart", Module4.class.getSimpleName());
+                //30.2. Send email to newsofgame2023 with title error and message detailNewAggregate table is empty
+                sendEmail("error", "detailNewAggregate table is empty");
+            } else {
+                //31. Reset log_status_list
+                log_status_list.clear();
+                //32. Insert detailNewAggregate data into dbmart value (id, name, created_at, updated_at, created_by, updated_by)
+                for (detailNewAggregate detailNewAggregate : detailNewAggregateList) {
+                    //note: sử dụng duplicate key để ghi đè dữ liệu
+                    //33. Get all log status of insert detailNewAggregate
+                    log_status_list.add(detailNewAggregateDAOMart.insertDetailNewAggregate(detailNewAggregate));
+
+                }
+                //34. Check if any log status is not success in log_status_list
+                if (log_status_list.contains("EI")) {
+                    //34.1 If any log status is not success then insert 1 row in the log table : status, event_name, location
+                    logDAO.insertLog(log_status, "detailNewAggregate", Module4.class.getSimpleName());
+                    //34.2 Send email to newsofgame2023 with title error and message error insert detailNewAggregate
+                    sendEmail("error", "error insert detailNewAggregate");
+                    //34.3 Delete control running
+                    controlsDAO.deleteControl();
+                }
+            }
+            //35. Update control status to END
             controlsDAO.updateControl("END");
-            sendEmail("Thành công", "Insert dữ liệu vào dbmart thành công");
+            //36. Send email to newsofgame2023 with title success and message Insert data into dbmart success
+            sendEmail("success", "Insert data into dbmart success");
         }
 
     }
@@ -165,5 +203,6 @@ public class Module4 {
             throw new RuntimeException(e);
         }
     }
+
 }
 

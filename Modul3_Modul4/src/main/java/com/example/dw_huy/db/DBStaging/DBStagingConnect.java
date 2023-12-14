@@ -22,6 +22,7 @@ public class DBStagingConnect {
     }
 
     public static DBStagingConnect getInstall() {
+        //4. connect to db staging
         if (install == null) install = new DBStagingConnect();
         return install;
     }

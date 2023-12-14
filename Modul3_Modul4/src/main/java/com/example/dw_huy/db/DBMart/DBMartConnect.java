@@ -21,6 +21,7 @@ public class DBMartConnect {
     }
 
     public static DBMartConnect getInstall() {
+        //7. connect to dbmart.db [modul4]
         if (install == null) install = new DBMartConnect();
         return install;
     }

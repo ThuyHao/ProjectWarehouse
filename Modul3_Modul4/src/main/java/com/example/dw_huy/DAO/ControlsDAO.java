@@ -86,7 +86,7 @@ public class ControlsDAO {
     }
 
 
-    //check control status is running
+    //2.
     public boolean checkControlRunning() {
         boolean check = false;
         try {
