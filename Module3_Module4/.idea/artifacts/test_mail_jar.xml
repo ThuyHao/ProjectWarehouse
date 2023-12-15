@@ -2,7 +2,7 @@
   <artifact type="jar" name="test_mail:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/test_mail_jar</output-path>
     <root id="archive" name="dw_huy.jar">
-      <element id="module-output" name="Modul3_Modul4" />
+      <element id="module-output" name="Module3_Module4" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.19.4/protobuf-java-3.19.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.jar" path-in-jar="/" />
