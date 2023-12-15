@@ -3,6 +3,7 @@ package com.example.dw_huy.module;
 import com.example.dw_huy.DAO.*;
 import com.example.dw_huy.DAO.DBNew.*;
 import com.example.dw_huy.Utils.SendEmail;
+import com.example.dw_huy.Utils.Util;
 import com.example.dw_huy.beans.DBNew.*;
 import com.example.dw_huy.beans.DBStaging.staging;
 
@@ -51,9 +52,9 @@ public class Module3 {
                         authorsDim authorsDim = new authorsDim();
                         authorsDim.setName(staging.getAuthor_name());
                         authorsDim .setCreated_at(staging.getCreated_at());
-                        authorsDim.setUpdated_at(staging.getCreated_at());
+                        authorsDim.setUpdated_at(null);
                         authorsDim.setCreated_by("admin");
-                        authorsDim.setUpdated_by("admin");
+                        authorsDim.setUpdated_by(null);
                         //9.2. Get the log status of ins ert author
                         log_status = authorDAO.insertAuthor(authorsDim);
                         //9.3. Check if the log status is success
@@ -107,7 +108,7 @@ public class Module3 {
                     game_newsFact.setUpdated_at(null);
                     game_newsFact.setCreated_by("admin");
                     game_newsFact.setUpdated_by("admin");
-                    game_newsFact.setSource("riot games");
+                    game_newsFact.setSource(staging.getSource_name());
                     //14. Get the log status of insert game news
                     log_status = game_newsDAO.insertNews(game_newsFact);
                 }
