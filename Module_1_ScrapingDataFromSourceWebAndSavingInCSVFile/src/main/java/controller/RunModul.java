@@ -34,7 +34,7 @@ public class RunModul {
 
                 //7 Insert 1 row in the files table: id, config_id, name, column_name, data_format, file_timestamp, destination, dir_save, dir_archive, note, status, created_at, updated_at, created_by, updated_by. With status = "RN"
                 fileDAO.insertFile(15, util.nameFile, util.titleText + ", " + util.descriptionText + ", " + util.authorText + ", " + util.timeText + ", " +
-                        util.urlNewText + ", " + util.categoryText + ", " + util.imageText + ", " + util.contentText + ", " + util.sourceText, ".csv", "modul 1","output", "data_archive", "", "RN", util.memberCreate, util.memberUpdate);
+                        util.urlNewText + ", " + util.categoryText + ", " + util.imageText + ", " + util.contentText + ", " + util.sourceText, ".csv", "module 1","output", "data_archive", "", "RN", util.memberCreate, util.memberUpdate);
 
                 //8 Scraping data and saving in Temporary Storage: output/GetDataWeb_yyyyMMdd_HHmmss.csv.
                 boolean scrapData = dataWeb.fetchDataAndWriteToCSV();
@@ -49,7 +49,7 @@ public class RunModul {
                     fileDAO.deleteFiles("RN");
 
                     //9.3 Insert 1 row in the logs table: id, event_name, event_type, status, location, created_at. With status = 'ES'
-                    logDAO.insertLogs("Get data from web", "Scraping data", "ES", "Modul1/src/dao/getDataFromSource");
+                    logDAO.insertLogs("Get data from web", "Scraping data", "ES", "Module1/src/dao/getDataFromSource");
 
                     //9.4 Send email to newsofgame2023@gmail.com with title is "Scraping error" and content: "Scraping web is error at" + error time.
                     try {SimpleDateFormat dateFormat = new SimpleDateFormat(util.timeFormat);
@@ -82,7 +82,7 @@ public class RunModul {
                 controlDAO.updateControlsStatus("RN", "SC");
 
                 //13 Insert 1 row in the logs table: id, event_name, event_type, status, location, created_at. With status = 'SC'
-                logDAO.insertLogs("Get Data from web", "get data from source", "SC","Modul 1");
+                logDAO.insertLogs("Get Data from web", "get data from source", "SC","Module 1");
             }
         }
     }
