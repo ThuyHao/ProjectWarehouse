@@ -77,7 +77,7 @@ public class SaveDataToStaging {
                          * location, created_at with status='SC'
                          */
                         LogDAO.insertLogs(getConnectionDBControl(), "Insert a Row from controls table", "Success insert a row into table controls with status ='RN' and AND DATE(created_at) = CURRENT_DATE ",
-                    "SC", "Modul 2");
+                    "SC", "Module 2");
 
                         /**
                          * 8. Connect to DBStaging
@@ -152,10 +152,12 @@ public class SaveDataToStaging {
                 if (isInsertSuccessful) {
                     /**
                      *  13. Insert into the Logs table: event_name, event_type, status, location, created_at with status='SC'
+                     *  event_name: Insert data from files csv into DBStaging
+                     *  event_type: Success inserting data from file GetDataWeb_yyyyMMdd_HHmmss.csv into DBStaging
                      */
                     LogDAO.insertLogs(getConnectionDBControl(), "Insert data from files csv into DBStaging",
                             "Success inserting data from file GetDataWeb_yyyyMMdd_HHmmss.csv into DBStaging",
-                            "SC", "Modul 2");
+                            "SC", "Module 2");
 
                     /**
                      * 14. Update in file table has status = 'done'
@@ -169,7 +171,7 @@ public class SaveDataToStaging {
                          *  event_type: Success update a row from table files with status ='done' and AND DATE(created_at) = CURRENT_DATE
                          */
                         LogDAO.insertLogs(getConnectionDBControl(), "Update status from files table", "Success update a row from table files with status ='done' and AND DATE(created_at) = CURRENT_DATE ",
-                                "SC", "Modul 2");
+                                "SC", "Module 2");
 
                         /**
                          *  17. Update in controls table has status='SC'
@@ -182,7 +184,7 @@ public class SaveDataToStaging {
                              * event_type:Success update a row from table controls with status ='done' and AND DATE(created_at) = CURRENT_DATE
                              */
                             LogDAO.insertLogs(getConnectionDBControl(), "Update status from controls table", "Success update a row from table controls with status ='done' and AND DATE(created_at) = CURRENT_DATE ",
-                                    "SC", "Modul 2");
+                                    "SC", "Module 2");
                         } else {
                             /**
                              *   18.1. Insert into the Logs table: event_name, event_type, status, location, created_at with status='EI'
@@ -190,7 +192,7 @@ public class SaveDataToStaging {
                              *   event_type: Error update a row from table controls with status ='done' and AND DATE(created_at) = CURRENT_DATE
                              */
                             LogDAO.insertLogs(getConnectionDBControl(), "Update status from controls table", "Error update a row from table controls with status ='done' and AND DATE(created_at) = CURRENT_DATE ",
-                                    "SC", "Modul 2");
+                                    "ER", "Module 2");
                         }
                     } else {
                         /**
@@ -199,7 +201,7 @@ public class SaveDataToStaging {
                          *  event_type: Error update a row from table files with status ='done' and AND DATE(created_at) = CURRENT_DATE
                          */
                         LogDAO.insertLogs(getConnectionDBControl(), "Update status from files table", "Error update a row from table files with status ='done' and AND DATE(created_at) = CURRENT_DATE ",
-                                "ER", "Modul 2");
+                                "ER", "Module 2");
                     }
                 } else {
                     /**
@@ -212,7 +214,7 @@ public class SaveDataToStaging {
                      *   event_type: Success delete a row from table controls with status ='RN' and AND DATE(created_at) = CURRENT_DATE
                      */
                     LogDAO.insertLogs(getConnectionDBControl(), "Delete a Row from controls table", "Success delete a row from table controls with status ='RN' and AND DATE(created_at) = CURRENT_DATE ",
-                            "EI", "Modul 2");
+                            "EI", "Module 2");
                     /**
                      *  12.3. Send email to newsofgame2023@gmail.com with content: "Save data from files to DBStaging error at" + error time.
                      */
@@ -231,7 +233,6 @@ public class SaveDataToStaging {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            //////////////
         } catch (CsvValidationException | SQLException e) {
             throw new RuntimeException(e);
         }
