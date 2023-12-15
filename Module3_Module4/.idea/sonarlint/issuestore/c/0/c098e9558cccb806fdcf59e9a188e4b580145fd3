@@ -1,0 +1,18 @@
+
+\
+java:S1192&"FDefine a constant instead of duplicating this literal "admin" 6 times.(êêå
+k	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„ Àšùÿÿÿÿ
+k	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢èêÊùÿÿÿÿ
+k	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¤ùÀƒüÿÿÿÿ
+f	java:S117="QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(öìó
+a	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(ĞğË
+h
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(Çµí‘
+X
+java:S1128"BRemove this unused import 'com.example.dw_huy.db.DBNew.DBConnect'.(†©Òœ
+h
+java:S1128"MRemove this unused import 'com.example.dw_huy.db.DBStaging.DBStagingConnect'.(Ë¦×ßıÿÿÿÿ
+F
+java:S1128	"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ
+B
+java:S1128",Remove this unused import 'java.util.Queue'.(Äá™ô

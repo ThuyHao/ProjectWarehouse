@@ -1,0 +1,14 @@
+
+`	java:S112/"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+`	java:S112Q"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+`	java:S112f"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+f	java:S1176"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎÆÂÆ
+k	java:S117W"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ğ‘ø–øÿÿÿÿ
+k	java:S117k"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ıôî³øÿÿÿÿ
+b	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(ÁĞ’
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(üïÌğıÿÿÿÿ
+@	java:S106J"+Replace this use of System.out by a logger.(óÌ–›
+@	java:S106M"+Replace this use of System.out by a logger.(ÑÉ•ï
+E	java:S106n"+Replace this use of System.out by a logger.(Ø‘Åºúÿÿÿÿ
+_
+java:S1128"IRemove this unused import 'com.example.dw_huy.beans.DBNew.categoriesDim'.(†‰ï¡
