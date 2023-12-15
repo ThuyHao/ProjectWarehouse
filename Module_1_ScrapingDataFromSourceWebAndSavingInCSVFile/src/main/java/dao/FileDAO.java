@@ -11,7 +11,7 @@ import java.util.Optional;
 public class FileDAO {
 
     /**
-     * Select the files table and check if any of them has a row with status 'RN'.
+     * Select the files table and check if any of them has a row with status 'done'.
      * If true, return true. Otherwise, return false.
      *
      * @return the result of the method
