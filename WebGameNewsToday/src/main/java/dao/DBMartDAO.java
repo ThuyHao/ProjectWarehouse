@@ -1,6 +1,6 @@
 package dao;
 
-import context.DBConnect;
+import context.DBContext;
 import model.DetailNewAggregate;
 import model.HomeAggregate;
 
@@ -18,7 +18,7 @@ public class DBMartDAO {
     public List<HomeAggregate> getAllStagingData() {
         List<HomeAggregate> homeAggregateList = new ArrayList<>();
 
-        try (Connection connection = DBConnect.getConnection()) {
+        try (Connection connection = DBContext.getConnection()) {
             String sql = "SELECT id, name_category, title, image, description, name_author, day_up FROM homeaggregate ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
                  ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -50,7 +50,7 @@ public class DBMartDAO {
     //lấy ra 2 tin tức nằm cuối cùng để hiển thị đầu trang home
     public List<HomeAggregate> getProductWithMaxId() {
         List<HomeAggregate> homeWithMaxId = new ArrayList<>();
-        try (Connection connection = DBConnect.getConnection()) {
+        try (Connection connection = DBContext.getConnection()) {
             String sql = "SELECT id, name_category, title, image, description, name_author, day_up FROM homeaggregate ORDER BY id DESC LIMIT 2";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
                  ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -82,7 +82,7 @@ public class DBMartDAO {
         public DetailNewAggregate getNewsById(String id) {
             String query = "SELECT id, name_category, title, image, description, name_author, day_up, content  FROM detailnewaggregate WHERE id=?";
 
-            try (Connection connection = DBConnect.getConnection();
+            try (Connection connection = DBContext.getConnection();
                  PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
                 preparedStatement.setString(1, id);
@@ -114,7 +114,7 @@ public class DBMartDAO {
     //lấy ra 3 tin tức nằm cuối cùng để hiển thị lên danh sách tin tức mới nhất
     public List<HomeAggregate> getTop3Product() {
         List<HomeAggregate> top3Product = new ArrayList<>();
-        try (Connection connection = DBConnect.getConnection()) {
+        try (Connection connection = DBContext.getConnection()) {
             String sql = "SELECT id, name_category, title, image, description, name_author, day_up FROM homeaggregate ORDER BY id DESC LIMIT 3";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
                  ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -143,7 +143,7 @@ public class DBMartDAO {
     public List<HomeAggregate> getTop4Product() {
         List<HomeAggregate> top4Product = new ArrayList<>();
 
-        try (Connection connection = DBConnect.getConnection()) {
+        try (Connection connection = DBContext.getConnection()) {
             String sql = "SELECT id, name_category, title, image, description, name_author, day_up  FROM homeaggregate ORDER BY id DESC LIMIT 4";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
