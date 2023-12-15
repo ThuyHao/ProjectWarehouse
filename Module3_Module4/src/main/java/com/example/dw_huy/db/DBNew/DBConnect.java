@@ -4,25 +4,44 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 public class DBConnect {
     private static DBConnect install;
 
-    private final String DbUrl = "jdbc:mysql://localhost:3306/dbnew";
-    private final String user = "root";
-    private final String pass = "";
-
     private final Connection connection;
 
     private DBConnect() {
+        //1. Load config.properties
+        Properties prop = new Properties();
+        try (InputStream input = new FileInputStream("config.properties")) {
+            prop.load(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String serverName = prop.getProperty("serverName");
+        String dbName = prop.getProperty("dbName_new");
+        String portNumber = prop.getProperty("portNumber");
+        String instance = prop.getProperty("instance");
+        String userID = prop.getProperty("userID");
+        String password = prop.getProperty("password");
+
+        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName;
+        if (instance != null && !instance.trim().isEmpty()) {
+            url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + instance + "/" + dbName;
+        }
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(DbUrl, user, pass);
+            connection = DriverManager.getConnection(url, userID, password);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     public static DBConnect getInstall() {
         //7. connect to dbnew.db [modul3]

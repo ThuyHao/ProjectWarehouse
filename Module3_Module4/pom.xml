@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example</groupId>
-  <artifactId>Modul3_Modul4</artifactId>
+  <artifactId>Module3_Module4</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>dw_huy</name>
   <packaging>war</packaging>
