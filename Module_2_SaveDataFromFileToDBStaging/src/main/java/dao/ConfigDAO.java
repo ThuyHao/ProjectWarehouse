@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import static context.DBConnect.getConnectionDBControl;
+import static context.DBContext.getConnection;
 
 public class ConfigDAO {
     public static String getEmailFromDB() {
         String email = null;
 
-        try (Connection connection = getConnectionDBControl();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT  format FROM configs WHERE id = 33")) {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -28,7 +28,7 @@ public class ConfigDAO {
     public static String getPasswordFromDB() {
         String password = null;
 
-        try (Connection connection = getConnectionDBControl();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT  format FROM configs WHERE id = 34")) {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -45,7 +45,7 @@ public class ConfigDAO {
     public static String getEmailReceiveFromDB() {
         String emailReceive = null;
 
-        try (Connection connection = getConnectionDBControl();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT  format FROM configs WHERE id = 35")) {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {

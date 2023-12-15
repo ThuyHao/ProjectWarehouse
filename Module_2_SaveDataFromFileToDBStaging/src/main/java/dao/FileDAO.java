@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static context.DBConnect.getConnectionDBControl;
+import static context.DBContext.getConnection;
 
 public class FileDAO {
     public static boolean checkStatusFile(Connection connectionControl) {
@@ -15,7 +15,7 @@ public class FileDAO {
                 "FROM files\n" +
                 "WHERE status = 'SC' AND DATE(created_at) = CURRENT_DATE;\n ";
 
-        try (Connection connection = getConnectionDBControl();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -32,7 +32,7 @@ public class FileDAO {
                 "WHERE DATE(created_at) = CURRENT_DATE AND status = 'SC' " +
                 "ORDER BY created_at DESC LIMIT 1";
 
-        try (Connection controlConnection = getConnectionDBControl();
+        try (Connection controlConnection = getConnection();
              PreparedStatement updateStatement = controlConnection.prepareStatement(updateStatusDoneSQL)) {
             updateStatement.executeUpdate();
 
@@ -46,7 +46,7 @@ public class FileDAO {
     public static Files getFileCSV() {
         Files files = null;
 
-        try (Connection connection = getConnectionDBControl();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT id, config_id, name, " +
                      "column_name, data_format, file_timestamp, destination, dir_save, dir_archive, note, status, created_at, updated_at, created_by, updated_by FROM files ORDER BY id DESC LIMIT 1;")) {
 
