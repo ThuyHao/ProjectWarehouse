@@ -10,14 +10,10 @@ public class SendEmail {
 
 
     public static void sendMail(String title, String message) {
-        Properties emailProperties = new Properties();
-        try (InputStream input = SendEmail.class.getClassLoader().getResourceAsStream("config.properties")) {
-            emailProperties.load(input);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String email_from = emailProperties.getProperty("email_from");
-        String password = emailProperties.getProperty("email_app_password");
+        Util util = new Util();
+        String email_from = util.from;
+        String password = util.password;
+
         // Properties for mail session
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -41,7 +37,7 @@ public class SendEmail {
         try {
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
             msg.setFrom(new InternetAddress(email_from, "Data WareHouse"));
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailProperties.getProperty("email_to"), false));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(util.emailReceive, false));
             msg.setSubject(title);
             msg.setSentDate(new Date());
 

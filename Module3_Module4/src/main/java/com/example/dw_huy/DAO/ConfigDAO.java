@@ -6,6 +6,7 @@ import com.example.dw_huy.db.DBController.DBControllerConnect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class ConfigDAO {
     private final DBControllerConnect dbConnect;
@@ -31,7 +32,24 @@ public class ConfigDAO {
         return res;
     }
 
-    //insert config
+        //get all id and format of config table and store in map interger, string
+    public Map<Integer, String> loadConfigs() {
+        Map<Integer, String> configMap = new java.util.HashMap<>();
+        try {
+            String sql = "SELECT `id`, `format` FROM `configs`";
+            PreparedStatement statement = dbConnect.get(sql);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                configMap.put(rs.getInt(1), rs.getString(2));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return configMap;
+    }
+    public String getValueById(Map<Integer, String> configMap, int id) {
+        return configMap.get(id);
+    }
 
 
     public static void main(String[] args) {
