@@ -1,13 +1,13 @@
 package dao;
 
-import context.DBConnect;
+import context.DBContext;
 
 import java.sql.*;
 
-import static context.DBConnect.getConnectionDBControl;
+import static context.DBContext.getConnection;
 
 public class ControlDAO {
-    Connection connectionControl = DBConnect.getConnectionDBControl();
+    Connection connectionControl = DBContext.getConnection();
 
     public ControlDAO() throws SQLException {
     }
@@ -19,7 +19,7 @@ public class ControlDAO {
                 "ORDER BY created_at DESC\n" +
                 "LIMIT 1;\n";
 
-        try (Connection connection = getConnectionDBControl();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -55,7 +55,7 @@ public class ControlDAO {
     public static void deleteRowControl(Connection connectionControl) {
         String deleteSQL = "DELETE FROM controls WHERE status = 'RN' AND DATE(created_at) = CURRENT_DATE";
 
-        try (Connection conn = getConnectionDBControl();
+        try (Connection conn = getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(deleteSQL)) {
             preparedStatement.executeUpdate();
 
@@ -69,7 +69,7 @@ public class ControlDAO {
                 "WHERE DATE(created_at) = CURRENT_DATE AND status = 'RN' " +
                 "ORDER BY created_at DESC LIMIT 1";
 
-        try (Connection controlConnection = getConnectionDBControl();
+        try (Connection controlConnection = getConnection();
              PreparedStatement updateStatement = controlConnection.prepareStatement(updateStatusDoneSQL)) {
             updateStatement.executeUpdate();
         } catch (SQLException e) {
