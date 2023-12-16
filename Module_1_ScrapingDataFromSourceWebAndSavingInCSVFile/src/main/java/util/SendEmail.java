@@ -44,8 +44,4 @@ public class SendEmail {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args) {
-        sendMail("newsofgame2023@gmail.com","Thành công", "lấy dữ liệu ngày ... thành công");
-    }
 }

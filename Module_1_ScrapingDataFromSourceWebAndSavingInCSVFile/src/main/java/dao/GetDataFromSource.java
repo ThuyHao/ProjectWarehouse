@@ -54,7 +54,6 @@ public class GetDataFromSource {
 
                 csvWriter.writeNext(new String[]{title, description, author, time, link, articleTitle, image, articleContent, util.nameSource});
                 res = true;
-                System.out.println("Xong");
 
             }
         } catch (IOException e) {
@@ -92,12 +91,6 @@ public class GetDataFromSource {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        GetDataFromSource data = new GetDataFromSource();
-        data.fetchDataAndWriteToCSV();
-        data.moveFileToFolder();
     }
 }
 

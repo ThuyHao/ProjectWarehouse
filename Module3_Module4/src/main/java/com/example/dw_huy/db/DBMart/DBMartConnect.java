@@ -11,19 +11,19 @@ public class DBMartConnect {
     private final Connection connection;
 
     private DBMartConnect() {
-        //1. Load config.properties
+        //1. Load configs.properties
         Properties prop = new Properties();
-        try (InputStream input = new FileInputStream("config.properties")) {
+        try (InputStream input = new FileInputStream("configs.properties")) {
             prop.load(input);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String serverName = prop.getProperty("serverName");
+        String serverName = prop.getProperty("serverNameMart");
         String dbName = prop.getProperty("dbName_mart");
         String portNumber = prop.getProperty("portNumber");
         String instance = prop.getProperty("instance");
         String userID = prop.getProperty("userID");
-        String password = prop.getProperty("password");
+        String password = prop.getProperty("passwordMart");
 
         String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + dbName;
         if (instance != null && !instance.trim().isEmpty()) {
