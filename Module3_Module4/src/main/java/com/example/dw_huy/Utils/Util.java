@@ -1,6 +1,6 @@
 package com.example.dw_huy.Utils;
 
-import com.example.dw_huy.DAO.ConfigDAO;
+import com.example.dw_huy.DAO.DBController.ConfigDAO;
 
 public class Util {
     public ConfigDAO configDAO = new ConfigDAO();

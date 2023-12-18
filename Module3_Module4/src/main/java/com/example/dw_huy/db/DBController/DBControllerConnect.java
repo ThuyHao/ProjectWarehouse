@@ -43,7 +43,7 @@ public class DBControllerConnect {
     }
 
     public static DBControllerConnect getInstall() {
-        //1. Connect to db controller
+        //2. Connect to db controller
         if (install == null) install = new DBControllerConnect();
         return install;
     }

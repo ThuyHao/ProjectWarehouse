@@ -80,7 +80,7 @@ public class AuthorDAO {
     public String getAuthorName(int authorId) {
         String authorName = "";
         try {
-            String sql = "SELECT name FROM `authorsdim` WHERE id = ?";
+            String sql = "SELECT name FROM `authorsdim` WHERE id = ? LIMIT 1";
             PreparedStatement statement = dbConnect.get(sql);
             statement.setInt(1, authorId);
             ResultSet rs = statement.executeQuery();
@@ -154,7 +154,7 @@ public class AuthorDAO {
     public static void main(String[] args) {
         AuthorDAO authorDAO = new AuthorDAO();
         //get author id
-        int authorId = authorDAO.getAuthorId("Chungdsds");
+        boolean authorId = authorDAO.checkAuthorExist("riot Phlox");
         System.out.println(authorId);
     }
 

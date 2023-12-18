@@ -36,7 +36,7 @@ public class detailNewAggregateDAOMart {
     public String insertDetailNewAggregate(detailNewAggregate detailNewAggregate) {
         String res = "";
         try {
-            String sql = "INSERT INTO dbmart.homeaggregate\n" +
+            String sql = "INSERT INTO dbmart.detailnewaggregate\n" +
                     "    (`name_category`, `title`, `image`, `description`, `name_author`, `day_up`,`content`)\n" +
                     "VALUES\n" +
                     "    (?, ?, ?, ?, ?, ?,?)\n" +
