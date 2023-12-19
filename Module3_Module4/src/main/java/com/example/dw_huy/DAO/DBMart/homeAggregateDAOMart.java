@@ -38,9 +38,9 @@ public class homeAggregateDAOMart {
         try {
             String sql;
             sql = "INSERT INTO dbmart.homeaggregate\n" +
-                    "    (`name_category`, `title`, `image`, `description`, `name_author`, `day_up`)\n" +
+                    "    (`id`,`name_category`, `title`, `image`, `description`, `name_author`, `day_up`)\n" +
                     "VALUES\n" +
-                    "    (?, ?, ?, ?, ?, ?)\n" +
+                    "    (?, ?, ?, ?, ?, ?,?)\n" +
                     "ON DUPLICATE KEY UPDATE\n" +
                     "    `name_category` = VALUES(`name_category`),\n" +
                     "    `title` = VALUES(`title`),\n" +
@@ -60,12 +60,13 @@ public class homeAggregateDAOMart {
     }
 
     public static void doSQL(homeAggregate homeAggregate, PreparedStatement preparedStatement, String sql) throws SQLException {
-        preparedStatement.setString(1, homeAggregate.getName_category());
-        preparedStatement.setString(2, homeAggregate.getTitle());
-        preparedStatement.setString(3, homeAggregate.getImage());
-        preparedStatement.setString(4, homeAggregate.getDescription());
-        preparedStatement.setString(5, homeAggregate.getName_author());
-        preparedStatement.setTimestamp(6, homeAggregate.getDay_up());
+        preparedStatement.setInt(1, homeAggregate.getId());
+        preparedStatement.setString(2, homeAggregate.getName_category());
+        preparedStatement.setString(3, homeAggregate.getTitle());
+        preparedStatement.setString(4, homeAggregate.getImage());
+        preparedStatement.setString(5, homeAggregate.getDescription());
+        preparedStatement.setString(6, homeAggregate.getName_author());
+        preparedStatement.setTimestamp(7, homeAggregate.getDay_up());
 
         preparedStatement.executeUpdate();
     }

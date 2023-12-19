@@ -125,6 +125,6 @@ public class ControlsDAO {
 
     public static void main(String[] args) {
         ControlsDAO controlsDAO = new ControlsDAO();
-    controlsDAO.deleteControl();
+        System.out.println(controlsDAO.checkControlRunning());
     }
 }

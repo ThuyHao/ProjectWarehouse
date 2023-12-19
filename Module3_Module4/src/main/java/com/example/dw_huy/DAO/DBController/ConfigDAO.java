@@ -70,9 +70,9 @@ public class ConfigDAO {
 
 
     public static void main(String[] args) {
-    //test load config
+        //test load config
         ConfigDAO configDAO = new ConfigDAO();
-        boolean res = configDAO.checkConfigId(37);
+        int res = configDAO.getIdByUrlSource("riot news");
         System.out.println(res);
 
     }

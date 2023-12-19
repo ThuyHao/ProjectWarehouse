@@ -37,9 +37,9 @@ public class detailNewAggregateDAOMart {
         String res = "";
         try {
             String sql = "INSERT INTO dbmart.detailnewaggregate\n" +
-                    "    (`name_category`, `title`, `image`, `description`, `name_author`, `day_up`,`content`)\n" +
+                    "    (`id`,`name_category`, `title`, `image`, `description`, `name_author`, `day_up`,`content`)\n" +
                     "VALUES\n" +
-                    "    (?, ?, ?, ?, ?, ?,?)\n" +
+                    "    (?, ?, ?, ?, ?, ?,?,?)\n" +
                     "ON DUPLICATE KEY UPDATE\n" +
                     "    `name_category` = VALUES(`name_category`),\n" +
                     "    `title` = VALUES(`title`),\n" +
@@ -50,13 +50,14 @@ public class detailNewAggregateDAOMart {
                     "    `day_up` = VALUES(`day_up`),\n" +
                     "    `content` = VALUES(`content`);";
             PreparedStatement statement = dbConnect.get(sql);
-            statement.setString(1, detailNewAggregate.getName_category());
-            statement.setString(2, detailNewAggregate.getTitle());
-            statement.setString(3, detailNewAggregate.getImage());
-            statement.setString(4, detailNewAggregate.getDescription());
-            statement.setString(5, detailNewAggregate.getName_author());
-            statement.setTimestamp(6, detailNewAggregate.getDay_up());
-            statement.setString(7, detailNewAggregate.getContent());
+            statement.setInt(1, detailNewAggregate.getId());
+            statement.setString(2, detailNewAggregate.getName_category());
+            statement.setString(3, detailNewAggregate.getTitle());
+            statement.setString(4, detailNewAggregate.getImage());
+            statement.setString(5, detailNewAggregate.getDescription());
+            statement.setString(6, detailNewAggregate.getName_author());
+            statement.setTimestamp(7, detailNewAggregate.getDay_up());
+            statement.setString(8, detailNewAggregate.getContent());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {

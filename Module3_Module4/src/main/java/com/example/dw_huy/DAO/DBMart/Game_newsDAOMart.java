@@ -39,9 +39,9 @@ public class Game_newsDAOMart {
         String res = "";
         try {
             String sql = "INSERT INTO `game_newsfact` (\n" +
-                    "  `title`, `author_id`, `description`, `url`, `image`, `content`, `source`,\n" +
+                    "  `id`,`title`, `author_id`, `description`, `url`, `image`, `content`, `source`,\n" +
                     "  `category_id`, `created_at`, `updated_at`, `created_by`, `updated_by`\n" +
-                    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?)\n" +
+                    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)\n" +
                     "ON DUPLICATE KEY UPDATE\n" +
                     "  `title` = VALUES(`title`),\n" +
                     "  `author_id` = VALUES(`author_id`),\n" +
@@ -54,18 +54,19 @@ public class Game_newsDAOMart {
                     "  `updated_at` = NOW(),\n" +
                     "  `updated_by` = VALUES(`updated_by`)";
             PreparedStatement statement = dbConnect.get(sql);
-            statement.setString(1, game_newsFact.getTitle());
-            statement.setInt(2, game_newsFact.getAuthor_id());
-            statement.setString(3, game_newsFact.getDescription());
-            statement.setString(4, game_newsFact.getUrl());
-            statement.setString(5, game_newsFact.getImage());
-            statement.setString(6, game_newsFact.getContent());
-            statement.setString(7, game_newsFact.getSource());
-            statement.setInt(8, game_newsFact.getCategory_id());
-            statement.setTimestamp(9, game_newsFact.getCreated_at());
-            statement.setTimestamp(10, game_newsFact.getUpdated_at());
-            statement.setString(11, game_newsFact.getCreated_by());
-            statement.setString(12, game_newsFact.getUpdated_by());
+            statement.setInt(1, game_newsFact.getId());
+            statement.setString(2, game_newsFact.getTitle());
+            statement.setInt(3, game_newsFact.getAuthor_id());
+            statement.setString(4, game_newsFact.getDescription());
+            statement.setString(5, game_newsFact.getUrl());
+            statement.setString(6, game_newsFact.getImage());
+            statement.setString(7, game_newsFact.getContent());
+            statement.setString(8, game_newsFact.getSource());
+            statement.setInt(9, game_newsFact.getCategory_id());
+            statement.setTimestamp(10, game_newsFact.getCreated_at());
+            statement.setTimestamp(11, game_newsFact.getUpdated_at());
+            statement.setString(12, game_newsFact.getCreated_by());
+            statement.setString(13, game_newsFact.getUpdated_by());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {

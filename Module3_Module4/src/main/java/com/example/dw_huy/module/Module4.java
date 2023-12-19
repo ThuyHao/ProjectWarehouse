@@ -28,6 +28,7 @@ public class Module4 {
         boolean currentProcessRunning = controlsDAO.checkControlRunning();
 
         String log_status = "";
+
         //3 get config id source from config table
         int config_id = configDAO.getIdByUrlSource("riot news");
         //4. Check if any process is running
@@ -70,13 +71,14 @@ public class Module4 {
                     //10. Insert 1 row in the dbmart authorsdim table : id, name, created_at, updated_at, created_by, updated_by and Get log status of insert author
                     log_status = authorDAOMart.insertAuthor(authorsDim);
                 }
-                //11. Check log status is not a success
-                if (log_status.equals("EI")) {
-                    //11.1 Insert 1 row in the log table: status, event_name, location with status = Error
-                    logDAO.insertLog("insert author", "saving into DBMart", log_status, Module4.class.getSimpleName());
-                    //11.2 Send email to newsofgame2023@gmail.com with title Error and message error insert author
-                    sendEmail("Error", "error insert author");
-                }
+
+            }
+            //11. Check log status is not a success
+            if (log_status.equals("EI")) {
+                //11.1 Insert 1 row in the log table: status, event_name, location with status = Error
+                logDAO.insertLog("insert author", "saving into DBMart", log_status, Module4.class.getSimpleName());
+                //11.2 Send email to newsofgame2023@gmail.com with title Error and message error insert author
+                sendEmail("Error", "error insert author");
             }
             //12. Get category data from dbnew categoriesdim that just been created or updated
             List<categoriesDim> categoriesDimList = CategoryDAO.getCategoryDataTimeUp();
@@ -94,13 +96,14 @@ public class Module4 {
                     log_status = categoryDAOMart.insertCategory(categoriesDim);
                 }
                 //End of loop
-                //15. check if log status is not a success
-                if (log_status.equals("EI")) {
-                    //15.1 Insert 1 row in the log table : status, event_name, location with status = EI
-                    logDAO.insertLog("insert category", "saving into DBMart", log_status, Module4.class.getSimpleName());
-                    //15.2 Send email to newsofgame2023@gmail.com with title error and message error insert category
-                    sendEmail("error", "error insert category");
-                }
+
+            }
+            //15. check if log status is not a success
+            if (log_status.equals("EI")) {
+                //15.1 Insert 1 row in the log table : status, event_name, location with status = EI
+                logDAO.insertLog("insert category", "saving into DBMart", log_status, Module4.class.getSimpleName());
+                //15.2 Send email to newsofgame2023@gmail.com with title error and message error insert category
+                sendEmail("error", "error insert category");
             }
             //16. Get game_news data from dbnew that just been created or updated
             List<game_newsFact> game_newsFactList = game_newsDAO.getDataTimeUp();
@@ -119,13 +122,14 @@ public class Module4 {
                     log_status = game_newsDAOMart.insertNews(game_newsFact);
                 }
                 //end of loop
-                //19. Check if log status is not success
-                if (log_status.equals("EI")) {
-                    //19.1 Insert 1 row in the log table : status, event_name, location with status = EI
-                    logDAO.insertLog("insert game_news", "saving into DBMart", log_status, Module4.class.getSimpleName());
-                    //19.2 Send email to newsofgame2023@gmail.com with title error and message error insert game_news
-                    sendEmail("error", "error insert game_news");
+
                 }
+            //19. Check if log status is not success
+            if (log_status.equals("EI")) {
+                //19.1 Insert 1 row in the log table : status, event_name, location with status = EI
+                logDAO.insertLog("insert game_news", "saving into DBMart", log_status, Module4.class.getSimpleName());
+                //19.2 Send email to newsofgame2023@gmail.com with title error and message error insert game_news
+                sendEmail("error", "error insert game_news");
             }
             //20. Get data from dbnew homeAggregate that just been created or updated
             List<homeAggregate> homeAggregateList = homeAggregateDAONew.getDataTimeUp();
@@ -145,14 +149,15 @@ public class Module4 {
 
                 }
                 //end of loop
-                //23. Check if log status is not success
-                if (log_status.equals("EI")) {
-                    //23.1 Insert 1 row in the log table : status, event_name, location with status = EI
-                    logDAO.insertLog("insert homeAggregate", "saving into DBMart", log_status, Module4.class.getSimpleName());
-                    //23.2 Send email to newsofgame2023@gmail.com with title error and message error insert homeAggregate
-                    sendEmail("error", "error insert homeAggregate");
-                }
 
+
+            }
+            //23. Check if log status is not success
+            if (log_status.equals("EI")) {
+                //23.1 Insert 1 row in the log table : status, event_name, location with status = EI
+                logDAO.insertLog("insert homeAggregate", "saving into DBMart", log_status, Module4.class.getSimpleName());
+                //23.2 Send email to newsofgame2023@gmail.com with title error and message error insert homeAggregate
+                sendEmail("error", "error insert homeAggregate");
             }
             //24. Get data from dbnew detailNewAggregate that just been created or updated
             List<detailNewAggregate> detailNewAggregateList = detailNewAggregateDAO.getDataTimeUp();
@@ -163,6 +168,8 @@ public class Module4 {
                 logDAO.insertLog("detailNewAggregate table is empty", "saving into DBMart", "ER", Module4.class.getSimpleName());
                 //25.2. Send email to newsofgame2023@gmail.com with title error and message detailNewAggregate table is empty
                 sendEmail("error", "detailNewAggregate table is empty");
+                //25.3 Delete control running
+                controlsDAO.deleteControl();
             } else {
                 //for each loop
 

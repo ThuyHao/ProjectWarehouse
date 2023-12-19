@@ -37,7 +37,14 @@ public class homeAggregateDAO {
     public String insertHomeAggregate(homeAggregate homeAggregate) {
         try {
             String sql = "INSERT INTO `homeaggregate`(`name_category`, `title`, `image`, `description`, `name_author`, `day_up`) VALUES (?,?,?,?,?,?)";
-            homeAggregateDAOMart.doSQL(homeAggregate, dbConnect.get(sql), sql);
+            PreparedStatement statement = dbConnect.get(sql);
+            statement.setString(1, homeAggregate.getName_category());
+            statement.setString(2, homeAggregate.getTitle());
+            statement.setString(3, homeAggregate.getImage());
+            statement.setString(4, homeAggregate.getDescription());
+            statement.setString(5, homeAggregate.getName_author());
+            statement.setTimestamp(6, homeAggregate.getDay_up());
+
         } catch (SQLException e) {
             logger.error("Insert home aggregate fail" + e);
             return "EI";
