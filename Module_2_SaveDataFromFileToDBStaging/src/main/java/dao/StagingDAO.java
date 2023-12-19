@@ -1,6 +1,6 @@
 package dao;
 
-import context.DBConnect;
+import context.DBContextStaging;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,12 +10,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static context.DBConnect.getConnectionDBStaging;
+import static context.DBContextStaging.getConnectionDBStaging;
+
 
 public class StagingDAO {
 
 
-    Connection connectionStaging = DBConnect.getConnectionDBStaging();
+    Connection connectionStaging = DBContextStaging.getConnectionDBStaging();
 
     public StagingDAO() throws SQLException {
     }

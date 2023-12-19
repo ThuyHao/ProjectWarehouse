@@ -1,13 +1,13 @@
 package dao;
 
-import context.DBConnect;
+import context.DBContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class LogDAO {
-    Connection connectionControl = DBConnect.getConnectionDBControl();
+    Connection connectionControl = DBContext.getConnection();
 
     public LogDAO() throws SQLException {
     }
