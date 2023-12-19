@@ -70,9 +70,10 @@ public class ConfigDAO {
 
 
     public static void main(String[] args) {
-//check config id exist
+    //test load config
         ConfigDAO configDAO = new ConfigDAO();
-        System.out.println(configDAO.getIdByUrlSource(" gamek"));
+        boolean res = configDAO.checkConfigId(37);
+        System.out.println(res);
 
     }
 }

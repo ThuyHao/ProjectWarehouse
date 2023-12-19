@@ -51,7 +51,7 @@ public class StagingDAO {
         List<staging> stagingList = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM `staging` WHERE DATE(`created_at`) = CURDATE() and `status`='SC'";
+            String sql = "SELECT * FROM `staging` WHERE DATE(`timeUp`) = CURDATE() and `status`='SC'";
             getList(stagingList, sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -90,7 +90,7 @@ public class StagingDAO {
         StagingDAO stagingDAO = new StagingDAO();
         List<staging> stagingList = stagingDAO.getStagingDataTimeUp();
         for (staging staging : stagingList) {
-            System.out.println(staging.getAuthor_name());
+            System.out.println(staging.getTitle() + " " + staging.getTimeUp());
         }
     }
 }

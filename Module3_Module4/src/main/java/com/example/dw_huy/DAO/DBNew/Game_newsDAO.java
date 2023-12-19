@@ -103,7 +103,7 @@ public class Game_newsDAO {
         List<game_newsFact> list = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM `game_newsfact` WHERE `isDelete` = 0 AND DATE(`created_at`) = CURDATE() OR `isDelete` = 0 AND DATE(`updated_at`) = CURDATE();" ;
+            String sql = "SELECT * FROM `game_newsfact` WHERE `isDelete` = 0 AND DATE(`created_at`) = CURDATE();" ;
             saveGameNewsList(list, sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -144,7 +144,7 @@ public class Game_newsDAO {
         Game_newsDAO game_newsDAO = new Game_newsDAO();
         List<game_newsFact> list = game_newsDAO.getDataTimeUp();
         for (game_newsFact item : list) {
-            System.out.println(item.getAuthor_id() +" - " + item.getCategory_id());
+            System.out.println(item.getTitle());
         }
     }
 }

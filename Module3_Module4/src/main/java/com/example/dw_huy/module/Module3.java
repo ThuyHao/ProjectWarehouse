@@ -27,6 +27,8 @@ public class Module3 {
         int category_id = 0;
         String log_status = "";
         String home_status = "";
+        String author_status = "";
+        String category_status = "";
         List<staging> stagingList;
         //3. Get config id source by name
         int config_id = configDAO.getIdByUrlSource("riot news");
@@ -45,7 +47,7 @@ public class Module3 {
                 logDAO.insertLog("There is no data available in staging", "get staging list","EG", Module3.class.getSimpleName());
                 //8.2 Send email with title is "Error ở Module 3" and a message is "There is no data in staging"
                 sendEmail("Error", "There is no data in staging");
-				//8.3 Delete the control that was created
+                //8.3 Delete the control that was created
                 controlsDAO.deleteControl();
             } else {
                 //9 connect to db new
@@ -67,19 +69,7 @@ public class Module3 {
                         authorsDim.setCreated_by("admin");
                         authorsDim.setUpdated_by(null);
                         //10.2. Get the log status of insert author
-                        log_status = authorDAO.insertAuthor(authorsDim);
-                        //10.3. Check if the log status is success
-                        if (!(log_status.equals("SC"))) {
-                            //10.3.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is " insert author"
-                            logDAO.insertLog(" insert author", "insert data into dbnew ",log_status, Module3.class.getSimpleName());;
-                            //10.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert author"
-                            sendEmail("Error", "Error insert author");
-
-                        }
-                        else {
-                            //10. Insert 1 row into log table: status, event_name, location with status is "SC" and event_name is "insert author"
-                            logDAO.insertLog("insert author", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
-                        }
+                        author_status = authorDAO.insertAuthor(authorsDim);
 
                     }
 
@@ -95,18 +85,8 @@ public class Module3 {
                         categoriesDim.setCreated_by("admin");
                         categoriesDim.setUpdated_by("admin");
                         //12.2. Get the log status of insert category
-                        log_status = CategoryDAO.insertCategory(categoriesDim);
-                        //12.3. Check if the log status is success
-                        if (!(log_status.equals("SC"))) {
-                            //12.3.1 Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert category"
-                            logDAO.insertLog("insert category", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
-                            //12.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert category"
-                            sendEmail("Error", "Error insert category");
-                        }
-                        else {
-                            //13. Insert 1 row into log table: status, event_name, location with status is "SC" and event_name is "insert category"
-                            logDAO.insertLog("insert category", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
-                        }
+                        category_status = CategoryDAO.insertCategory(categoriesDim);
+
                     }
                     //14. Get category id by name
                     category_id = CategoryDAO.getCategoryId(staging.getCategory_name());
@@ -122,14 +102,38 @@ public class Module3 {
                     game_newsFact.setImage(staging.getImage());
                     game_newsFact.setContent(staging.getContent());
                     game_newsFact.setCategory_id(category_id);
-                    game_newsFact.setCreated_at(staging.getCreated_at());
-                    game_newsFact.setUpdated_at(null);
+                    game_newsFact.setCreated_at(staging.getTimeUp());
+                    game_newsFact.setUpdated_at(staging.getCreated_at());
                     game_newsFact.setCreated_by("admin");
                     game_newsFact.setUpdated_by("admin");
                     game_newsFact.setSource(staging.getSource_name());
                     //16. Get the log status of insert game news
                     log_status = game_newsDAO.insertNews(game_newsFact);
                 }
+                //10.3. Check if the log status is success
+                if (!(author_status.equals("SC"))) {
+                    //10.3.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is " insert author"
+                    logDAO.insertLog(" insert author", "insert data into dbnew ",author_status, Module3.class.getSimpleName());;
+                    //10.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert author"
+                    sendEmail("Error", "Error insert author");
+
+                }
+                else {
+                    //10. Insert 1 row into log table: status, event_name, location with status is "SC" and event_name is "insert author"
+                    logDAO.insertLog("insert author", "insert data into dbnew ",author_status, Module3.class.getSimpleName());
+                }
+                //12.3. Check if the log status is success
+                if (!(category_status.equals("SC"))) {
+                    //12.3.1 Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert category"
+                    logDAO.insertLog("insert category", "insert data into dbnew ",category_status, Module3.class.getSimpleName());
+                    //12.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert category"
+                    sendEmail("Error", "Error insert category");
+                }
+                else {
+                    //13. Insert 1 row into log table: status, event_name, location with status is "SC" and event_name is "insert category"
+                    logDAO.insertLog("insert category", "insert data into dbnew ",category_status, Module3.class.getSimpleName());
+                }
+
                 //17. Check if the log status is an error
                 if (!(log_status.equals("SC"))) {
                     //17.1. Insert 1 row in the log table: status, event_name, location
