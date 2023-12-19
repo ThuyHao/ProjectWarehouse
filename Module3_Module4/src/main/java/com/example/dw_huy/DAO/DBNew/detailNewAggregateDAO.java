@@ -51,10 +51,10 @@ public class detailNewAggregateDAO {
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("Insert aggregate success");
+
                 res = "SC";
             } else {
-                System.out.println("Insert aggregate fail");
+                System.out.println("Insert detail new aggregate fail");
                 res = "EI";
             }
         } catch (SQLException e) {

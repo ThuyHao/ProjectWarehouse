@@ -1,13 +1,14 @@
-package com.example.dw_huy.DAO;
+package com.example.dw_huy.DAO.DBController;
 
 
 import com.example.dw_huy.beans.DBController.logs;
 import com.example.dw_huy.db.DBController.DBControllerConnect;
-import com.example.dw_huy.db.DBStaging.DBStagingConnect;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,18 +20,20 @@ public class LogDAO {
     }
 
     //insert log
-    public void insertLog(String status, String event_name, String location) {
+    public void insertLog(String eventName, String eventType, String status, String location) {
         try {
-            String sql = "INSERT INTO `logs`(`status`, `event_name`, `location`) VALUES (?,?,?)";
+            String sql = "INSERT INTO `logs`(`event_name`, `event_type`,`status`, `location`,`created_at`) VALUES (?,?,?,?,?)";
             PreparedStatement statement = dbConnect.get(sql);
-            statement.setString(1, status);
-            statement.setString(2, event_name);
-            statement.setString(3, location);
+            statement.setString(1, eventName);
+            statement.setString(2, eventType);
+            statement.setString(3, status);
+            statement.setString(4, location);
+            statement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
 
             statement.executeUpdate();
-            System.out.println("insert log success + " + status + " + " + event_name + " + " + location);
+            System.out.println("insert log success + " + status + " + " + eventName + " + " + location);
         } catch (SQLException e) {
-            System.out.println("insert log fail + " + status + " + " + event_name + " + " + location);
+            System.out.println("insert log fail + " + status + " + " + eventName + " + " + location);
             throw new RuntimeException(e);
         }
     }
@@ -47,11 +50,12 @@ public class LogDAO {
             while (rs.next()) {
                 logs logs = new logs();
                 logs.setId(rs.getInt(1));
-                logs.setTimestamp(rs.getTimestamp(2));
-                logs.setStatus(rs.getString(3));
-                logs.setEvent_name(rs.getString(4));
+                logs.setEvent_name(rs.getString(2));
+                logs.setEvent_type(rs.getString(3));
+                logs.setStatus(rs.getString(4));
                 logs.setLocation(rs.getString(5));
                 logs.setCreated_at(rs.getTimestamp(6));
+                
 
                 logsList.add(logs);
             }
@@ -65,16 +69,7 @@ public class LogDAO {
     public static void main(String[] args) {
         //test
         LogDAO logDAO = new LogDAO();
-        logDAO.insertLog("success", "test", "test");
-        List<logs> logsList = logDAO.getAllLogs();
-        for (logs logs : logsList) {
-            System.out.println(logs.getId());
-            System.out.println(logs.getTimestamp());
-            System.out.println(logs.getStatus());
-            System.out.println(logs.getEvent_name());
-            System.out.println(logs.getLocation());
-            System.out.println(logs.getCreated_at());
-        }
+        logDAO.insertLog("Test", "insert", "SC", "Modul1");
     }
 
 }

@@ -54,7 +54,7 @@ public class SendEmail {
     }
 
     public static void main(String[] args) {
-        sendMail("Thành công", "lấy dữ liệu ngày ... thành công");
+        sendMail("Thành công", "lấy dữ liệu ngày ... thành công \t\t FINISH RUNNING MODULE 3");
 
     }
 }

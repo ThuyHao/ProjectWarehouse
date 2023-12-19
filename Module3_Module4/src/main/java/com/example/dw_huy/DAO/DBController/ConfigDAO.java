@@ -1,6 +1,5 @@
-package com.example.dw_huy.DAO;
+package com.example.dw_huy.DAO.DBController;
 
-import com.example.dw_huy.beans.DBController.configs;
 import com.example.dw_huy.db.DBController.DBControllerConnect;
 
 import java.sql.PreparedStatement;
@@ -32,7 +31,7 @@ public class ConfigDAO {
         return res;
     }
 
-        //get all id and format of config table and store in map interger, string
+    //get all id and format of config table and store in map interger, string
     public Map<Integer, String> loadConfigs() {
         Map<Integer, String> configMap = new java.util.HashMap<>();
         try {
@@ -47,15 +46,33 @@ public class ConfigDAO {
         }
         return configMap;
     }
+
     public String getValueById(Map<Integer, String> configMap, int id) {
         return configMap.get(id);
+    }
+
+    //get id by url source
+    public int getIdByUrlSource(String sourceName) {
+        int id = 0;
+        try {
+            String sql = "SELECT id FROM `configs` WHERE name LIKE ? LIMIT 1";
+            PreparedStatement statement = dbConnect.get(sql);
+            statement.setString(1, "url Source%" + sourceName + "%");
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return id;
     }
 
 
     public static void main(String[] args) {
 //check config id exist
         ConfigDAO configDAO = new ConfigDAO();
-        System.out.println(configDAO.checkConfigId(1));
+        System.out.println(configDAO.getIdByUrlSource(" gamek"));
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.dw_huy.DAO;
+package com.example.dw_huy.DAO.DBController;
 
 import com.example.dw_huy.db.DBController.DBControllerConnect;
 
@@ -45,7 +45,7 @@ public class ControlsDAO {
     public void deleteControl() {
         String res = "";
         try {
-            String sql = "DELETE FROM `controls` ORDER BY id DESC LIMIT 1";
+            String sql = "DELETE FROM `controls` WHERE status = 'RN' ORDER BY id DESC LIMIT 1";
             PreparedStatement statement = dbConnect.get(sql);
 
             int rowsInserted = statement.executeUpdate();
@@ -53,7 +53,7 @@ public class ControlsDAO {
                 System.out.println("Delete control success");
                 res = "SC";
             } else {
-                System.out.println("Delete control fail");
+                System.out.println("No process need to be deleted");
                 res = "ED";
             }
         } catch (SQLException e) {
@@ -90,7 +90,7 @@ public class ControlsDAO {
     public boolean checkControlRunning() {
         boolean check = false;
         try {
-            String sql = "SELECT * FROM `controls` WHERE status = 'RUNNING'";
+            String sql = "SELECT * FROM `controls` WHERE status = 'RN'";
             PreparedStatement statement = dbConnect.get(sql);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
@@ -117,9 +117,14 @@ public class ControlsDAO {
         }
         return configId;
     }
+//get only 1 id by name
+
+
+
+
 
     public static void main(String[] args) {
         ControlsDAO controlsDAO = new ControlsDAO();
-        System.out.println(controlsDAO.insertControl(1, "test1", "test", "END"));
+    controlsDAO.deleteControl();
     }
 }

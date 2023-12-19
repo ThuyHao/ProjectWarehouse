@@ -45,7 +45,7 @@ public class DBConnect {
 
     public static DBConnect getInstall() {
         //7. connect to dbnew.db [modul3]
-        //4. connect to dbnew.db [modul4]
+        //6. connect to dbnew.db [modul4]
         if (install == null) install = new DBConnect();
         return install;
     }

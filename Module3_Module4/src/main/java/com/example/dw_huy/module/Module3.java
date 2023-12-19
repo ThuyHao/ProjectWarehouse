@@ -1,99 +1,115 @@
 package com.example.dw_huy.module;
 
-import com.example.dw_huy.DAO.*;
+import com.example.dw_huy.DAO.DBController.ConfigDAO;
+import com.example.dw_huy.DAO.DBController.ControlsDAO;
+import com.example.dw_huy.DAO.DBController.LogDAO;
+import com.example.dw_huy.DAO.DBController.StagingDAO;
 import com.example.dw_huy.DAO.DBNew.*;
 import com.example.dw_huy.Utils.SendEmail;
-import com.example.dw_huy.Utils.Util;
 import com.example.dw_huy.beans.DBNew.*;
 import com.example.dw_huy.beans.DBStaging.staging;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Module3 {
-    private static final StagingDAO stagingDAO = new StagingDAO();
-    private static final AuthorDAO authorDAO = new AuthorDAO();
-    private static final com.example.dw_huy.DAO.DBNew.CategoryDAO CategoryDAO = new CategoryDAO();
-    private static final LogDAO logDAO = new LogDAO();
-    private static final Game_newsDAO game_newsDAO = new Game_newsDAO();
-    private static final com.example.dw_huy.DAO.DBNew.homeAggregateDAO homeAggregateDAO = new homeAggregateDAO();
-    private static final com.example.dw_huy.DAO.DBNew.detailNewAggregateDAO detailNewAggregateDAO = new detailNewAggregateDAO();
-    private static final ControlsDAO controlsDAO = new ControlsDAO();
 
 
     public static void main(String[] args) {
-        int config_id = controlsDAO.getLatestConfigId();
+        //2, connect to db controller
+        ControlsDAO controlsDAO = new ControlsDAO();
+        ConfigDAO configDAO = new ConfigDAO();
+        LogDAO logDAO = new LogDAO();
+
         int author_id = 0;
         int category_id = 0;
         String log_status = "";
+        String home_status = "";
         List<staging> stagingList;
-        List<String> log_status_list = new ArrayList<>();
-        //2. Check if any process is running
+        //3. Get config id source by name
+        int config_id = configDAO.getIdByUrlSource("riot news");
+        //4. Check the control table if there is a process running
         if (!(controlsDAO.checkControlRunning())) {
-            //3. Insert 1 row into control table : config_id, name, description, status = "RUNNING"
-            controlsDAO.insertControl(config_id, "staging_warehouse", "staging_warehouse", "RUNNING");
-            //5. Get list of staging that created at the current time and status is success
+            //5. Insert 1 row into control table: config_id, name, description, status = "RN"
+            controlsDAO.insertControl(config_id, "Saving into dbnew", "get staging data and save into dbnew", "RN");
+            //6. Connect to db staging
+            StagingDAO stagingDAO = new StagingDAO();
+
+            //7. Get a list of staging that created at the current time and status = "SC"
             stagingList = stagingDAO.getStagingDataTimeUp();
-            //6. Check if the list is empty
+            //8. Check if the list is empty
             if (stagingList.isEmpty()) {
-                //6.1. insert 1 row in the log table : status, event_name, location with status is "staging table is empty"
-                logDAO.insertLog("staging table is empty", "staging", Module3.class.getSimpleName());
-                //6.2. send email to newsofgame2023@gmail.com with title is "Error" and message is "There is no data in staging"
+                //8.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "get staging list"
+                logDAO.insertLog("There is no data available in staging", "get staging list","EG", Module3.class.getSimpleName());
+                //8.2 Send email with title is "Error ở Module 3" and a message is "There is no data in staging"
                 sendEmail("Error", "There is no data in staging");
             } else {
-                //8. Loop through the staging list
+                //9 connect to db new
+                AuthorDAO authorDAO = new AuthorDAO();
+                CategoryDAO CategoryDAO = new CategoryDAO();
+                Game_newsDAO game_newsDAO = new Game_newsDAO();
+                homeAggregateDAO homeAggregateDAO = new homeAggregateDAO();
+                detailNewAggregateDAO detailNewAggregateDAO = new detailNewAggregateDAO();
+
+
                 for (staging staging : stagingList) {
-                    //9. Check if author is exist in authorsdim table by name
+                    //10. Check if author is exist in authorsdim table by name
                     if (!(authorDAO.checkAuthorExist(staging.getAuthor_name()))) {
-                        //9.1 Insert author into authorsdim table values (name, created_at, updated_at, created_by, updated_by)
+                        //10.1 Insert author into authorsdim table values (name, created_at, updated_at, created_by, updated_by)
                         authorsDim authorsDim = new authorsDim();
                         authorsDim.setName(staging.getAuthor_name());
                         authorsDim .setCreated_at(staging.getCreated_at());
                         authorsDim.setUpdated_at(null);
                         authorsDim.setCreated_by("admin");
                         authorsDim.setUpdated_by(null);
-                        //9.2. Get the log status of ins ert author
+                        //10.2. Get the log status of insert author
                         log_status = authorDAO.insertAuthor(authorsDim);
-                        //9.3. Check if the log status is success
+                        //10.3. Check if the log status is success
                         if (!(log_status.equals("SC"))) {
-                            //9.3.1. Insert 1 row in the log table : status, event_name, location with status is "EI" and event_name is "insert author"
-                            logDAO.insertLog(log_status, "insert author", Module3.class.getSimpleName());
-                            //9.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert author"
+                            //10.3.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is " insert author"
+                            logDAO.insertLog(" insert author", "insert data into dbnew ",log_status, Module3.class.getSimpleName());;
+                            //10.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert author"
                             sendEmail("Error", "Error insert author");
-                            //9.3.3 Delete the control that was created
-                            controlsDAO.deleteControl();
+
                         }
+                        else {
+                            //10. Insert 1 row into log table: status, event_name, location with status is "SC" and event_name is "insert author"
+                            logDAO.insertLog("insert author", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
+                        }
+
                     }
-                    //10. Get author id by name
+
+                    //11. Get author id by name
                     author_id = authorDAO.getAuthorId(staging.getAuthor_name());
-                    //11. Check if category is existed in dim table by name
+                    //12. Check if name exists category in authorsdim table
                     if (!(CategoryDAO.checkCategoryExist(staging.getCategory_name()))) {
-                        //11.1 Innsert category into categoriesdim table values (name, created_at, updated_at, created_by, updated_by)
+                        //12.1 Innsert category into categoriesdim table values (name, created_at, updated_at, created_by, updated_by)
                         categoriesDim categoriesDim = new categoriesDim();
                         categoriesDim.setName(staging.getCategory_name());
                         categoriesDim.setCreated_at(staging.getCreated_at());
                         categoriesDim.setUpdated_at(staging.getCreated_at());
                         categoriesDim.setCreated_by("admin");
                         categoriesDim.setUpdated_by("admin");
-                        //11.2. Get the log status of insert category
+                        //12.2. Get the log status of insert category
                         log_status = CategoryDAO.insertCategory(categoriesDim);
-                        //11.3. Check if the log status is success
+                        //12.3. Check if the log status is success
                         if (!(log_status.equals("SC"))) {
-                            //11.3.1 Insert 1 row in the log table : status, event_name, location with status is "EI" and event_name is "insert category"
-                            logDAO.insertLog(log_status, "insert category", Module3.class.getSimpleName());
-                            //11.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert category"
+                            //12.3.1 Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert category"
+                            logDAO.insertLog("insert category", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
+                            //12.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert category"
                             sendEmail("Error", "Error insert category");
-                            //11.3.3 Delete the control that was created
-                            controlsDAO.deleteControl();
+                        }
+                        else {
+                            //13. Insert 1 row into log table: status, event_name, location with status is "SC" and event_name is "insert category"
+                            logDAO.insertLog("insert category", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
                         }
                     }
-                    //12. Get category id by name
+                    //14. Get category id by name
                     category_id = CategoryDAO.getCategoryId(staging.getCategory_name());
 
-                    //13. Insert 1 row into game news fact table: title, author_id, description, url, image, content, category_id, created_at, updated_at, created_by, updated_by, source
+                    //15. Insert 1 row into game news fact table: title, author_id, description, url, image, content, category_id, created_at, updated_at, created_by, updated_by, source
 
 
                     game_newsFact game_newsFact = new game_newsFact();
@@ -109,23 +125,25 @@ public class Module3 {
                     game_newsFact.setCreated_by("admin");
                     game_newsFact.setUpdated_by("admin");
                     game_newsFact.setSource(staging.getSource_name());
-                    //14. Get the log status of insert game news
+                    //16. Get the log status of insert game news
                     log_status = game_newsDAO.insertNews(game_newsFact);
                 }
-                //15. Check if the log status is error
+                //17. Check if the log status is an error
                 if (!(log_status.equals("SC"))) {
-                    //15.1. Insert 1 row in the log table : status, event_name, location
-                    logDAO.insertLog(log_status, "game_news", Module3.class.getSimpleName());
-                    //15.2. Delete the control that was created
+                    //17.1. Insert 1 row in the log table: status, event_name, location
+                    logDAO.insertLog("insert game news", "insert data into dbnew",log_status, Module3.class.getSimpleName());
+                    //17.2 Send email with title is "Error" and message is "Error insert game news"
+                    sendEmail("Error", "Error insert game news");
+                    //17.2. Delete the control that was created
                     controlsDAO.deleteControl();
                 }
                  else {
-                    //16. Get list of game news that created at the current time and status is success
+                    //18. Get a list of game news that created at the current time and isn't deleted
                     List<game_newsFact> game_newsFactList = game_newsDAO.getDataTimeUp();
-                    //17. Loop through the game news list
+                    //19. Loop through the game news list
                     for (game_newsFact g : game_newsFactList) {
 
-                        //18. Insert 1 row into home aggregate : name_category, title, image, description, name_author, day_up
+                        //20. Insert 1 row into home aggregate: name_category, title, image, description, name_author, day_up
                         homeAggregate homeAggregate = new homeAggregate();
                         homeAggregate.setName_category(CategoryDAO.getCategoryName(g.getCategory_id()));
                         homeAggregate.setTitle(g.getTitle());
@@ -133,22 +151,21 @@ public class Module3 {
                         homeAggregate.setDescription(g.getDescription());
                         homeAggregate.setName_author(authorDAO.getAuthorName(g.getAuthor_id()));
                         homeAggregate.setDay_up(g.getCreated_at());
-                        //19. Get the log status of insert home aggregate
-                        String home_status = homeAggregateDAO.insertHomeAggregate(homeAggregate);
-                        //20. Check if the log status is success
+                        //21. Get the log status of insert home aggregate
+                        home_status = homeAggregateDAO.insertHomeAggregate(homeAggregate);
+                        //22. Check if the home status isn't a success
                         if (!(home_status.equals("SC"))) {
-                            //20.1. Insert 1 row in the log table : status, event_name, location
-                            logDAO.insertLog(home_status, "insert warehouse home aggregate at game_news data id "+g.getId(), Module3.class.getSimpleName());
-                            //20.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert warehouse home aggregate at game_news data id"
-                            sendEmail("Error", "Error insert warehouse home aggregate at game_news data id "+g.getId());
-                            //20.3 Delete the control that was created
-                            controlsDAO.deleteControl();
-                        } else {
-                            //21. Send email to newsofgame2023@gmail.com with title is "Success" and message is "Insert data into home aggregate success "
-                            sendEmail("Success", "Insert data into home aggregate success ");
+                            //22.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert home aggregate"
+                            logDAO.insertLog("insert home aggregate", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
+                            //22.2 Send email with title is "Error" and a message is "Error insert home aggregate"
+                            sendEmail("Error", "Error insert home aggregate");
+                        }
+                        else {
+                            //23. Insert 1 row into log table : status, event_name, location with status is "SC" and event_name is "insert home aggregate"
+                            logDAO.insertLog("insert home aggregate", "insert data into dbnew",log_status, Module3.class.getSimpleName());
                         }
 
-                        //22. Insert 1 row into detail new aggregate : name_category, title, image, description, name_author, day_up, content
+                        //24. Insert 1 row into detail new aggregate: name_category, title, image, description, name_author, day_up, content
                         detailNewAggregate detailNewAggregate = new detailNewAggregate();
                         detailNewAggregate.setName_category(CategoryDAO.getCategoryName(g.getCategory_id()));
                         detailNewAggregate.setTitle(g.getTitle());
@@ -157,31 +174,34 @@ public class Module3 {
                         detailNewAggregate.setName_author(authorDAO.getAuthorName(g.getAuthor_id()));
                         detailNewAggregate.setDay_up(g.getCreated_at());
                         detailNewAggregate.setContent(g.getContent());
-                        //23. Get the log status of insert detail new aggregate
+                        //25. Get the log status of insert detail new aggregate
                         log_status = detailNewAggregateDAO.insertDetailNewAggregate(detailNewAggregate);
 
                     }
-                    //24. Check if the log status is success or not
-                    if (log_status.equals("SC")) {
-                        //24.1 Update control status to "END"
-                        controlsDAO.updateControl("END");
-                        //23.2 Send email to newsofgame2023@gmail.com with title is "Success" and message is "Insert data into detail new aggregate success"
-                        sendEmail("Success", "Insert data into detail new aggregate success");
 
-                    } else {
-                        //24.3. Insert 1 row in the log table : status, event_name, location with status is "EI" and event_name is "insert warehouse aggregate"
-                        logDAO.insertLog(log_status, "insert warehouse aggregate", Module3.class.getSimpleName());
-                        //24.4 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert warehouse aggregate"
-                        sendEmail("Error", "Error insert warehouse aggregate");
-                        //24.5 Delete the control that was created
+                    //26. Check if the log status is success or not
+                    if (!(log_status.equals("SC"))) {
+                        //26.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert detail new aggregate"
+                        logDAO.insertLog("insert detail new aggregate", "insert data into dbnew",log_status, Module3.class.getSimpleName());
+                        //26.2 Send email with title is "Error" and a message is "Error insert detail new aggregate"
+                        sendEmail("Error", "Error insert detail new aggregate");
+                        //26.3 Delete the control that was created
                         controlsDAO.deleteControl();
+                    }
+                    else {
+                        //27. Insert 1 row into log table : status, event_name, location with status is "SC" and event_name is "insert detail new aggregate"
+                        logDAO.insertLog("insert detail new aggregate", "insert data into dbnew",log_status, Module3.class.getSimpleName());
+                        //28. Update control status to "SC"
+                        controlsDAO.updateControl("SC");
+                        //29. Send email with title is "Success" and message is "Insert data into detail new aggregate success \n FINISH RUNNING MODULE 3"
+                        sendEmail("Success", "Insert data into detail new aggregate success \t\t FINISH RUNNING MODULE 3");
                     }
                 }
             }
         } else {
-            //25. If there is a process running, insert 1 row in the log table : status, event_name, location
-            logDAO.insertLog("There is a process running", "staging", Module3.class.getSimpleName());
-            //26. Send email to newsofgame2023@gmail.com with title is "Error" and message is "There is a process running"
+            //4.1. Insert 1 row in the log table : status, event_name, location with status is "ER" and event_name is "There is a process running"
+            logDAO.insertLog("There is a process running", "insert data into dbnew","ER", Module3.class.getSimpleName());
+            //4.2 Send email with title is "Error" and message is "There is a process running"
             sendEmail("Error", "There is a process running");
         }
 
