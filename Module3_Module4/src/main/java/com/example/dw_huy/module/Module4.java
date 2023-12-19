@@ -149,10 +149,10 @@ public class Module4 {
                 if (log_status.equals("EI")) {
                     //23.1 Insert 1 row in the log table : status, event_name, location with status = EI
                     logDAO.insertLog("insert homeAggregate", "saving into DBMart", log_status, Module4.class.getSimpleName());
-
                     //23.2 Send email to newsofgame2023@gmail.com with title error and message error insert homeAggregate
                     sendEmail("error", "error insert homeAggregate");
                 }
+
             }
             //24. Get data from dbnew detailNewAggregate that just been created or updated
             List<detailNewAggregate> detailNewAggregateList = detailNewAggregateDAO.getDataTimeUp();
@@ -178,7 +178,7 @@ public class Module4 {
                     //27.1 Insert 1 row in the log table : status, event_name, location with status = EI
                     logDAO.insertLog("insert detailNewsAggregate", "saving into DBMart", log_status, Module4.class.getSimpleName());
                     //27.2 Send email to newsofgame2023@gmail.com with title error and message error insert detailNewAggregate
-                    sendEmail("error", "error insert detailNewAggregate");
+                    sendEmail("error", "error insert detailNewAggregate \t\t FINISH RUNNING MODULE 4 ");
                     //27.3 Delete control running
                     controlsDAO.deleteControl();
                 } else {
@@ -186,6 +186,8 @@ public class Module4 {
                     controlsDAO.updateControl("SC");
                     //29. Send email to newsofgame2023@gmail.com with title success and message Insert data into dbmart success
                     sendEmail("success", "Insert data into dbmart success \t\t FINISH RUNNING MODULE 4 ");
+                    //30. Insert 1 row in the log table : status, event_name, location with status = SC
+                    logDAO.insertLog("Insert data into dbmart success", "saving into DBMart", "SC", Module4.class.getSimpleName());
                 }
             }
 
