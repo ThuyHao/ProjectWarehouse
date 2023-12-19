@@ -1,4 +1,4 @@
-package com.example.dw_huy.DAO;
+package com.example.dw_huy.DAO.DBController;
 
 import com.example.dw_huy.beans.DBStaging.staging;
 import com.example.dw_huy.db.DBStaging.DBStagingConnect;
@@ -90,7 +90,7 @@ public class StagingDAO {
         StagingDAO stagingDAO = new StagingDAO();
         List<staging> stagingList = stagingDAO.getStagingDataTimeUp();
         for (staging staging : stagingList) {
-            System.out.println(staging.getId() + " " + staging.getTitle() + " " + staging.getDescription() + " " + staging.getAuthor_name() + " " + staging.getTimeUp() + " " + staging.getUrl() + " " + staging.getCategory_name() + " " + staging.getImage() + " " + staging.getContent() + " " + staging.getStatus() + " " + staging.getCreated_at());
+            System.out.println(staging.getAuthor_name());
         }
     }
 }
