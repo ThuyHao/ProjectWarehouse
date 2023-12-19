@@ -26,7 +26,7 @@ public class DBContext {
     public static void main(String[] args) {
         // Specify the relative source path and destination path
         String sourceRelativePath = "config.properties";
-        String destinationPath = "src/main/resources/config.properties";
+        String destinationPath = "src/main/resources/configs.properties";
 
         // Copy the properties file to the resources folder
         copyPropertiesFile(sourceRelativePath, destinationPath);

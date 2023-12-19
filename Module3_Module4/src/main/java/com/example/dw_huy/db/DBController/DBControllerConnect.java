@@ -15,9 +15,9 @@ public class DBControllerConnect {
     private final Connection connection;
 
     private DBControllerConnect() {
-        //1. Load config.properties
+        //1. Load configs.properties
         Properties prop = new Properties();
-        try (InputStream input = new FileInputStream("config.properties")) {
+        try (InputStream input = new FileInputStream("configs.properties")) {
             prop.load(input);
         } catch (Exception e) {
             e.printStackTrace();
