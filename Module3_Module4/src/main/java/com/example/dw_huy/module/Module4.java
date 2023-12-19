@@ -39,7 +39,7 @@ public class Module4 {
         } else {
 
             //5. Insert 1 row in the control table : config_id, name, description, status with status = RUNNING
-            controlsDAO.insertControl(config_id, "saving into DBMart", "getting data from dbnew and save it into dbmart", "RN");
+            controlsDAO.insertControl(15, "saving into DBMart", "getting data from dbnew and save it into dbmart", "RN");
             //6. Connect to db new
             AuthorDAO authorDAO = new AuthorDAO();
             CategoryDAO CategoryDAO = new CategoryDAO();

@@ -71,9 +71,9 @@ publishing {
 apply plugin: 'org.hidetake.ssh'
 remotes {
     host {
-        host = '34.124.142.121'
-        user = 'g20130253'
-        identity = file('C:/Users/RynVi/.ssh/id_rsa')
+        host = '35.240.145.14'
+        user = 'thuyhao_it_2002'
+        identity = file('C:/Users/lemin/.ssh/id_rsa')
     }
 }
 ssh.settings {
@@ -104,7 +104,7 @@ task docker_upload_file_to_server {
             session(remotes.host) {
                 remove '/usr/deploy/.war'
 
-                put from: "${project.projectDir}/build/libs/Project_TTLTW_Nhom14-1.0-SNAPSHOT.war",
+                put from: "${project.projectDir}/build/libs/NewsOfGame-1.0-SNAPSHOT.war",
                         into: "/usr/deploy/.war"
             }
         }

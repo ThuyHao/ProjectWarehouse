@@ -10,6 +10,9 @@ import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.io.*;
 import java.util.*;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 
 public class GetDataFromSource {
@@ -26,7 +29,8 @@ public class GetDataFromSource {
      */
     public boolean fetchDataAndWriteToCSV() throws IOException {
         boolean res = false;
-        try (CSVWriter csvWriter = new CSVWriter(new FileWriter(csvFileName))) {
+        try (CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(
+                new FileOutputStream(csvFileName), StandardCharsets.UTF_8))) {
 
             // Write CSV header
             csvWriter.writeNext(new String[]{util.titleText, util.descriptionText, util.authorText, util.timeText, util.urlNewText, util.categoryText, util.imageText, util.contentText, util.sourceText});

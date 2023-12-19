@@ -33,7 +33,7 @@ public class Module3 {
         //4. Check the control table if there is a process running
         if (!(controlsDAO.checkControlRunning())) {
             //5. Insert 1 row into control table: config_id, name, description, status = "RN"
-            controlsDAO.insertControl(config_id, "Saving into dbnew", "get staging data and save into dbnew", "RN");
+            controlsDAO.insertControl(15, "Saving into dbnew", "get staging data and save into dbnew", "RN");
             //6. Connect to db staging
             StagingDAO stagingDAO = new StagingDAO();
 
@@ -45,6 +45,8 @@ public class Module3 {
                 logDAO.insertLog("There is no data available in staging", "get staging list","EG", Module3.class.getSimpleName());
                 //8.2 Send email with title is "Error ở Module 3" and a message is "There is no data in staging"
                 sendEmail("Error", "There is no data in staging");
+                //8.3 Delete the control that was created
+                controlsDAO.deleteControl();
             } else {
                 //9 connect to db new
                 AuthorDAO authorDAO = new AuthorDAO();
@@ -57,7 +59,7 @@ public class Module3 {
                 for (staging staging : stagingList) {
                     //10. Check if author is exist in authorsdim table by name
                     if (!(authorDAO.checkAuthorExist(staging.getAuthor_name()))) {
-                        //10.1 Insert author into authorsdim table values (name, created_at, updated_at, created_by, updated_by)
+//10.1 Insert author into authorsdim table values (name, created_at, updated_at, created_by, updated_by)
                         authorsDim authorsDim = new authorsDim();
                         authorsDim.setName(staging.getAuthor_name());
                         authorsDim .setCreated_at(staging.getCreated_at());
@@ -98,7 +100,7 @@ public class Module3 {
                         if (!(log_status.equals("SC"))) {
                             //12.3.1 Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert category"
                             logDAO.insertLog("insert category", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
-                            //12.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert category"
+//12.3.2 Send email to newsofgame2023@gmail.com with title is "Error" and message is "Error insert category"
                             sendEmail("Error", "Error insert category");
                         }
                         else {
@@ -137,12 +139,11 @@ public class Module3 {
                     //17.2. Delete the control that was created
                     controlsDAO.deleteControl();
                 }
-                 else {
+                else {
                     //18. Get a list of game news that created at the current time and isn't deleted
                     List<game_newsFact> game_newsFactList = game_newsDAO.getDataTimeUp();
                     //19. Loop through the game news list
                     for (game_newsFact g : game_newsFactList) {
-
                         //20. Insert 1 row into home aggregate: name_category, title, image, description, name_author, day_up
                         homeAggregate homeAggregate = new homeAggregate();
                         homeAggregate.setName_category(CategoryDAO.getCategoryName(g.getCategory_id()));
@@ -153,17 +154,7 @@ public class Module3 {
                         homeAggregate.setDay_up(g.getCreated_at());
                         //21. Get the log status of insert home aggregate
                         home_status = homeAggregateDAO.insertHomeAggregate(homeAggregate);
-                        //22. Check if the home status isn't a success
-                        if (!(home_status.equals("SC"))) {
-                            //22.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert home aggregate"
-                            logDAO.insertLog("insert home aggregate", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
-                            //22.2 Send email with title is "Error" and a message is "Error insert home aggregate"
-                            sendEmail("Error", "Error insert home aggregate");
-                        }
-                        else {
-                            //23. Insert 1 row into log table : status, event_name, location with status is "SC" and event_name is "insert home aggregate"
-                            logDAO.insertLog("insert home aggregate", "insert data into dbnew",log_status, Module3.class.getSimpleName());
-                        }
+
 
                         //24. Insert 1 row into detail new aggregate: name_category, title, image, description, name_author, day_up, content
                         detailNewAggregate detailNewAggregate = new detailNewAggregate();
@@ -178,10 +169,21 @@ public class Module3 {
                         log_status = detailNewAggregateDAO.insertDetailNewAggregate(detailNewAggregate);
 
                     }
+                    //22. Check if the home status isn't a success
+                    if (!(home_status.equals("SC"))) {
+                        //22.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert home aggregate"
+                        logDAO.insertLog("insert home aggregate", "insert data into dbnew ",log_status, Module3.class.getSimpleName());
+                        //22.2 Send email with title is "Error" and a message is "Error insert home aggregate"
+                        sendEmail("Error", "Error insert home aggregate");
+                    }
+                    else {
+                        //23. Insert 1 row into log table : status, event_name, location with status is "SC" and event_name is "insert home aggregate"
+                        logDAO.insertLog("insert home aggregate", "insert data into dbnew",log_status, Module3.class.getSimpleName());
+                    }
 
                     //26. Check if the log status is success or not
                     if (!(log_status.equals("SC"))) {
-                        //26.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert detail new aggregate"
+//26.1. Insert 1 row in the log table: status, event_name, location with status is "EI" and event_name is "insert detail new aggregate"
                         logDAO.insertLog("insert detail new aggregate", "insert data into dbnew",log_status, Module3.class.getSimpleName());
                         //26.2 Send email with title is "Error" and a message is "Error insert detail new aggregate"
                         sendEmail("Error", "Error insert detail new aggregate");
@@ -222,4 +224,3 @@ public class Module3 {
 
 
 }
-
