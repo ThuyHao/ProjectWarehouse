@@ -28,16 +28,16 @@ public class Module4 {
         boolean currentProcessRunning = controlsDAO.checkControlRunning();
 
         String log_status = "";
-
-        //3. Check if any process is running
+        //3 get config id source from config table
+        int config_id = configDAO.getIdByUrlSource("riot news");
+        //4. Check if any process is running
         if (currentProcessRunning) {
-            //3.1. Insert 1 row in the log table : status, event_name, location with status = Some process is running
+            //4.1. Insert 1 row in the log table : status, event_name, location with status = Some process is running
             logDAO.insertLog("Some process is running", "saving into DBMart", "ER", Module4.class.getSimpleName());
-            //3.2 Send email to newsofgame2023@gmail.com with title Error and message Some process is running
+            //4.2 Send email to newsofgame2023@gmail.com with title Error and message Some process is running
             sendEmail("Error", "Some process is running");
         } else {
-            //4 get config id source from config table
-            int config_id = configDAO.getIdByUrlSource("riot news");
+
             //5. Insert 1 row in the control table : config_id, name, description, status with status = RUNNING
             controlsDAO.insertControl(config_id, "saving into DBMart", "getting data from dbnew and save it into dbmart", "RN");
             //6. Connect to db new
@@ -154,41 +154,42 @@ public class Module4 {
                     sendEmail("error", "error insert homeAggregate");
                 }
             }
-            //23. Get data from dbnew detailNewAggregate that just been created or updated
+            //24. Get data from dbnew detailNewAggregate that just been created or updated
             List<detailNewAggregate> detailNewAggregateList = detailNewAggregateDAO.getDataTimeUp();
-            //24. Check if detailNewAggregate is empty
+            //25. Check if detailNewAggregate is empty
             if (detailNewAggregateList.isEmpty()) {
-                //24.1. Insert 1 row into log table : status, event_name, location with status = detailNewAggregate table is empty
+                //25.1. Insert 1 row into log table : status, event_name, location with status = detailNewAggregate table is empty
 
                 logDAO.insertLog("detailNewAggregate table is empty", "saving into DBMart", "ER", Module4.class.getSimpleName());
-                //24.2. Send email to newsofgame2023@gmail.com with title error and message detailNewAggregate table is empty
+                //25.2. Send email to newsofgame2023@gmail.com with title error and message detailNewAggregate table is empty
                 sendEmail("error", "detailNewAggregate table is empty");
             } else {
                 //for each loop
 
                 for (detailNewAggregate detailNewAggregate : detailNewAggregateList) {
                     //note: sử dụng duplicate key để ghi đè dữ liệu
-                    //25. Insert detailNewAggregate data into dbmart value (id, name, created_at, updated_at, created_by, updated_by) and get log status of insert detailNewAggregate
+                    //26. Insert detailNewAggregate data into dbmart value (id, name, created_at, updated_at, created_by, updated_by) and get log status of insert detailNewAggregate
                     log_status = detailNewAggregateDAOMart.insertDetailNewAggregate(detailNewAggregate);
 
                 }
                 //end of loop
-                //26. Check if log status is not success
+                //27. Check if log status is not success
                 if (log_status.equals("EI")) {
-                    //26.1 Insert 1 row in the log table : status, event_name, location with status = EI
+                    //27.1 Insert 1 row in the log table : status, event_name, location with status = EI
                     logDAO.insertLog("insert detailNewsAggregate", "saving into DBMart", log_status, Module4.class.getSimpleName());
-                    //26.2 Send email to newsofgame2023@gmail.com with title error and message error insert detailNewAggregate
+                    //27.2 Send email to newsofgame2023@gmail.com with title error and message error insert detailNewAggregate
                     sendEmail("error", "error insert detailNewAggregate");
-                    //26.3 Delete control running
+                    //27.3 Delete control running
                     controlsDAO.deleteControl();
                 } else {
-                    //27.Update control status to success
+                    //28.Update control status to success
                     controlsDAO.updateControl("SC");
+                    //29. Send email to newsofgame2023@gmail.com with title success and message Insert data into dbmart success
+                    sendEmail("success", "Insert data into dbmart success \t\t FINISH RUNNING MODULE 4 ");
                 }
             }
 
-            //28. Send email to newsofgame2023@gmail.com with title success and message Insert data into dbmart success
-            sendEmail("success", "Insert data into dbmart success \t\t FINISH RUNNING MODULE 4 ");
+
         }
 
     }
