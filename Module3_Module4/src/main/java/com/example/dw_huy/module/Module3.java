@@ -45,6 +45,8 @@ public class Module3 {
                 logDAO.insertLog("There is no data available in staging", "get staging list","EG", Module3.class.getSimpleName());
                 //8.2 Send email with title is "Error ở Module 3" and a message is "There is no data in staging"
                 sendEmail("Error", "There is no data in staging");
+				//8.3 Delete the control that was created
+                controlsDAO.deleteControl();
             } else {
                 //9 connect to db new
                 AuthorDAO authorDAO = new AuthorDAO();
