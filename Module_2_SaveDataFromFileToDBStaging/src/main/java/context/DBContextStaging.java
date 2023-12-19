@@ -57,13 +57,9 @@ public class DBContextStaging {
     private DBContextStaging() {
     }
 
-
     public static Connection getConnectionDBStaging() throws SQLException {
         return dataSource.getConnection();
     }
-
-
-
 
     public static void main(String[] args) throws SQLException {
         System.out.println(getConnectionDBStaging());

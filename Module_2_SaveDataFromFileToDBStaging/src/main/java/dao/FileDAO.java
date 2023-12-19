@@ -11,9 +11,7 @@ import static context.DBContext.getConnection;
 
 public class FileDAO {
     public static boolean checkStatusFile(Connection connectionControl) {
-        String sql = "SELECT id, config_id, name, column_name, data_format, file_timestamp, destination, dir_save, dir_archive, note, status, created_at, updated_at, created_by, updated_by\n" +
-                "FROM files\n" +
-                "WHERE status = 'SC' AND DATE(created_at) = CURRENT_DATE;\n ";
+        String sql = "SELECT id, config_id, name, column_name, data_format, file_timestamp, destination, dir_save, dir_archive, note, status, created_at, updated_at, created_by, updated_by FROM files WHERE status = 'SC' order by id desc limit 1";
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);

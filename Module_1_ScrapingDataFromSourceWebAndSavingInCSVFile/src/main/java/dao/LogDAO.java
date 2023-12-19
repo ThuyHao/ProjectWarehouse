@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class LogDAO {
 
     /**
-     * Writes a log entry when the event is executed.
+     *  Writes a log entry when the event is executed.
      * @param eventName
      * @param eventType
      * @param status
@@ -32,11 +32,6 @@ public class LogDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        LogDAO log = new LogDAO();
-        log.insertLogs("Test", "insert", "SC", "Modul1");
     }
 
 }
